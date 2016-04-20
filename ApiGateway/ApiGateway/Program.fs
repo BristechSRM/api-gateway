@@ -18,7 +18,7 @@ open Serilog
 let main _ =
     setupLogging()
 
-    let baseAddress = "http://*:9002"
+    let baseAddress = "http://*:9004"
     use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseAddress)
     Log.Information("Listening on {Address}", baseAddress)
 
