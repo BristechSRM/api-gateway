@@ -250,7 +250,8 @@
                 "title",
                 "status",
                 "speakerId",
-                "speakerName"
+                "speakerForename",
+                "speakerSurname"
             ],
             "properties": {
                 "id": {
@@ -284,9 +285,13 @@
                     "format": "guid",
                     "description": "The unique identifier of the speaker for the session"
                 },
-                "speakerName": {
+                "speakerForename": {
                     "type": "string",
-                    "description": "The name of the speaker"
+                    "description": "The forename of the speaker"
+                },
+                "speakerSurname": {
+                    "type": "string",
+                    "description": "The surname of the speaker"
                 },
                 "speakerImageUri": {
                     "type": "string",
@@ -302,9 +307,13 @@
                     "format": "guid",
                     "description": "The unique identifier of the administrator for the session"
                 },
-                "adminName": {
+                "adminForname": {
                     "type": "string",
-                    "description": "The name of the admin"
+                    "description": "The forename of the admin"
+                },
+                "adminSurname": {
+                    "type": "string",
+                    "description": "The surname of the admin"
                 },
                 "adminImageUri": {
                     "type": "string",
@@ -326,7 +335,8 @@
                 "status",
                 "dateAdded",
                 "speakerId",
-                "speakerName"
+                "speakerForename",
+                "speakerSurname"
             ],
             "properties": {
                 "id": {
@@ -365,9 +375,13 @@
                     "format": "guid",
                     "description": "The unique identifier of the session speaker"
                 },
-                "speakerName": {
+                "speakerForename": {
                     "type": "string",
-                    "description": "The name of the speaker"
+                    "description": "The forename of the speaker"
+                },
+                "speakerSurname": {
+                    "type": "string",
+                    "description": "The surname of the speaker"
                 },
                 "speakerImageUri": {
                     "type": "string",
@@ -379,9 +393,13 @@
                     "format": "guid",
                     "description": "The unique identifier of the session administrator"
                 },
-                "adminName": {
+                "adminForname": {
                     "type": "string",
-                    "description": "The name of the admin"
+                    "description": "The forename of the admin"
+                },
+                "adminSurname": {
+                    "type": "string",
+                    "description": "The surname of the admin"
                 },
                 "adminImageUri": {
                     "type": "string",
