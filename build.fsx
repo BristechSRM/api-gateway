@@ -12,7 +12,7 @@ Target "Clean" (fun _ ->
 Target "BuildApp" (fun _ ->
     !! "ApiGateway/**/*.fsproj"
     |> MSBuildRelease buildDir "Build"
-    |> Log "AppBuld-Output: "
+    |> Log "AppBuild-Output: "
 )
 
 "Clean"
