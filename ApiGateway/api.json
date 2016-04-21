@@ -1,0 +1,668 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Api Gateway",
+        "description": "Aggregates requests to multiple microservices into a single response",
+        "version": "1.0.0"
+    },
+    "host": "api.bris.tech:8081",
+    "schemes": [
+        "https"
+    ],
+    "basePath": "/",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/admins/{adminId}": {
+            "get": {
+                "tags": [
+                    "admins"
+                ],
+                "summary": "Retrieves the details of the specified admin",
+                "description": "The full admin details are retrieved",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "adminId",
+                        "description": "The admin identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "guid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The admin is found",
+                        "schema": {
+                            "$ref": "#/definitions/Admin"
+                        }
+                    },
+                    "404": {
+                        "description": "The admin does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/events": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Retrieves event summaries.",
+                "description": "The event summary details including ...",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Event"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions": {
+            "get": {
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Retrieves session summaries.",
+                "description": "The session summary details including session status, title and basic speaker and admin details.",
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/SessionSummary"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/sessions/{sessionId}": {
+            "get": {
+                "tags": [
+                    "sessions"
+                ],
+                "summary": "Retrieves the details of the specified session.",
+                "description": "The full session details are retrieved.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "sessionId",
+                        "description": "The session identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "guid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The session is found.",
+                        "schema": {
+                            "$ref": "#/definitions/SessionDetail"
+                        }
+                    },
+                    "404": {
+                        "description": "The session does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/speakers/{speakerId}": {
+            "get": {
+                "tags": [
+                    "speakers"
+                ],
+                "summary": "Retrieves the details of the specified speaker",
+                "description": "The full speaker details are retrieved",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "speakerId",
+                        "description": "The speaker identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "guid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The speaker is found",
+                        "schema": {
+                            "$ref": "#/definitions/Speaker"
+                        }
+                    },
+                    "404": {
+                        "description": "The speaker does not exist.",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/threads": {
+            "post": {
+                "tags": [
+                    "comms"
+                ],
+                "summary": "Adds a communication thread",
+                "description": "Creates a communication thread",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "Correspondence items",
+                        "description": "The communication correspondence items",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/CorrespondenceItem"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Communication thread successfully created",
+                        "schema": {
+                            "$ref": "#/definitions/ThreadCreated"
+                        }
+                    },
+                    "422": {
+                        "description": "Communication thread validation error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/threads/{threadId}": {
+            "get": {
+                "tags": [
+                    "comms"
+                ],
+                "summary": "Returns details of the specified communication thread",
+                "description": "Returns all correspondence within a communication thread",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "threadId",
+                        "description": "The communication thread identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "guid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Communication thread found",
+                        "schema": {
+                            "$ref": "#/definitions/ThreadDetail"
+                        }
+                    },
+                    "404": {
+                        "description": "Communication thread not found",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "SessionSummary": {
+            "type": "object",
+            "required": [
+                "id",
+                "title",
+                "status",
+                "speakerId",
+                "speakerName"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "Unique identifier."
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The title of the session"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Current status of the session",
+                    "enum": [
+                        "unassigned",
+                        "assigned",
+                        "in-progress",
+                        "deferred",
+                        "topic-approved",
+                        "date-assigned"
+                    ]
+                },
+                "date": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The date of the session"
+                },
+                "speakerId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the speaker for the session"
+                },
+                "speakerName": {
+                    "type": "string",
+                    "description": "The name of the speaker"
+                },
+                "speakerImageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The uri of the speaker's avatar"
+                },
+                "speakerRating": {
+                    "type": "integer",
+                    "description": "A rating of the profile (from 1 to 5)"
+                },
+                "adminId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the administrator for the session"
+                },
+                "adminName": {
+                    "type": "string",
+                    "description": "The name of the admin"
+                },
+                "adminImageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The uri of the admin's avatar"
+                },
+                "lastContact": {
+                    "type": "object",
+                    "$ref": "#/definitions/LastContactSummary",
+                    "description": "The details of the last contact with the speaker"
+                }
+            }
+        },
+        "SessionDetail": {
+            "type": "object",
+            "required": [
+                "id",
+                "title",
+                "status",
+                "dateAdded",
+                "speakerId",
+                "speakerName"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "Unique identifier"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The title of the session"
+                },
+                "status": {
+                    "type": "string",
+                    "description": "Current status of the session",
+                    "enum": [
+                        "unassigned",
+                        "assigned",
+                        "in-progress",
+                        "deferred",
+                        "topic-approved",
+                        "date-assigned"
+                    ]
+                },
+                "date": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The date of the session"
+                },
+                "dateAdded": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The time the session was added to the system"
+                },
+                "speakerId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the session speaker"
+                },
+                "speakerName": {
+                    "type": "string",
+                    "description": "The name of the speaker"
+                },
+                "speakerImageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the speaker's avatar"
+                },
+                "adminId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the session administrator"
+                },
+                "adminName": {
+                    "type": "string",
+                    "description": "The name of the admin"
+                },
+                "adminImageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the admin's avatar"
+                },
+                "lastContact": {
+                    "type": "object",
+                    "$ref": "#/definitions/LastContactSummary",
+                    "description": "The details of the last contact with the speaker"
+                },
+                "threadId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of any session conversation thread"
+                }
+            }
+        },
+        "Speaker": {
+            "type": "object",
+            "required": [
+                "id",
+                "handles"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the speaker"
+                },
+                "forename": {
+                    "type": "string",
+                    "description": "The speaker's forename"
+                },
+                "surname": {
+                    "type": "string",
+                    "description": "The speaker's surname"
+                },
+                "imageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the speaker's avatar"
+                },
+                "rating": {
+                    "type": "integer",
+                    "description": "The speaker's credibility rating (1 to 5)"
+                },
+                "handles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/HandleSummary"
+                    }
+                }
+            }
+        },
+        "Admin": {
+            "type": "object",
+            "required": [
+                "id",
+                "handles"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the admin"
+                },
+                "forename": {
+                    "type": "string",
+                    "description": "The admin's forename"
+                },
+                "surname": {
+                    "type": "string",
+                    "description": "The admin's surname"
+                },
+                "imageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the admin's avatar"
+                },
+                "handles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/HandleSummary"
+                    }
+                }
+            }
+        },
+        "HandleSummary": {
+            "type": "object",
+            "required": [
+                "type",
+                "identifier"
+            ],
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "The type of handle"
+                },
+                "identifier": {
+                    "type": "string",
+                    "description": "The unique identifier of the handle, given the type"
+                }
+            }
+        },
+        "Event": {
+            "type": "object",
+            "required": [
+                "id",
+                "date"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the event"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The date of the event"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A description of the event"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "The location of the event"
+                }
+            }
+        },
+        "CorrespondenceItem": {
+            "type": "object",
+            "required": [
+                "senderId",
+                "senderHandle",
+                "type",
+                "date",
+                "message"
+            ],
+            "properties": {
+                "senderId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The identifier of the sender"
+                },
+                "receiverId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The identifier of the reciever"
+                },
+                "type": {
+                    "type": "string",
+                    "description": "The type of correspondence",
+                    "enum": [
+                        "email",
+                        "mobile",
+                        "twitter",
+                        "meetup"
+                    ]
+                },
+                "senderHandle": {
+                    "type": "string",
+                    "description": "The handle of the sender. E.g. if the type of correspondence is 'email', then this will be the email address of the sender. If the type of correspondence is twitter, then this will be the twitter handle of the sender."
+                },
+                "receiverHandle": {
+                    "type": "string",
+                    "description": "The handle of the receiver."
+                },
+                "date": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "ThreadDetail": {
+            "type": "object",
+            "required": [
+                "id",
+                "items"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique communication thread identifier"
+                },
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/CorrespondenceItem"
+                    }
+                }
+            }
+        },
+        "ThreadCreated": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "The unique identifier"
+                }
+            }
+        },
+        "LastContactSummary": {
+            "type": "object",
+            "required": [
+                "date",
+                "senderId"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The date of the last communication."
+                },
+                "senderId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The identifier of the sender"
+                },
+                "receiverId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The identifier of the receiver"
+                }
+            }
+        },
+        "Error": {
+            "type": "object",
+            "required": [
+                "message"
+            ],
+            "properties": {
+                "message": {
+                    "type": "string"
+                },
+                "errors": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/ErrorDetail"
+                    }
+                }
+            }
+        },
+        "ErrorDetail": {
+            "type": "object",
+            "required": [
+                "resource",
+                "code",
+                "message"
+            ],
+            "properties": {
+                "resource": {
+                    "type": "string",
+                    "description": "The resource being accessed"
+                },
+                "field": {
+                    "type": "string",
+                    "description": "Optional field used for invalid or missing fields"
+                },
+                "code": {
+                    "type": "string",
+                    "description": "Can be missing (i.e. a resource is missing), missing-field (a required field was not sent in the request), invalid (the specified field does not pass validation or already-exists (the resource already exists).",
+                    "enum": [
+                        "missing",
+                        "missing-field",
+                        "invalid",
+                        "already-exists"
+                    ]
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
