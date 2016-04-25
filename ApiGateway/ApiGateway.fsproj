@@ -29,7 +29,11 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Logging.fs" />
+    <Compile Include="DTOs.fs" />
+    <Compile Include="Models.fs" />
     <Compile Include="DocsController.fs" />
+    <Compile Include="SessionsRepository.fs" />
+    <Compile Include="SessionsController.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <Content Include="app.config">
