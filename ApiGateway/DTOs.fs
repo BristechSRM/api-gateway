@@ -7,6 +7,7 @@ type SessionSummaryDto =
       Title : string
       Status : string
       Date : string
+      DateAdded : string
       SpeakerId : Guid
       SpeakerForename : string
       SpeakerSurname : string
