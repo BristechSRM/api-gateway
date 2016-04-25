@@ -3,6 +3,7 @@
 open System
 open System.Net.Http
 open Newtonsoft.Json
+open Serilog
 open Dtos
 open Models
 
@@ -34,10 +35,13 @@ let getLastContacts() =
 
     try
         let lastContactJson = client.GetAsync("http://api.bris.tech:8080/last-contact").Result.Content.ReadAsStringAsync().Result
+        Log.Information("Last contact endpoint found")
         JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
     with
         // Endpoint not found
-        | :? AggregateException -> [||]
+        | :? AggregateException ->
+            Log.Information("Could not reach last contact endpoint")
+            [||]
 
 let getSessions() = 
     use client = new HttpClient()
@@ -45,10 +49,13 @@ let getSessions() =
     let sessions =
         try
             let sessionJson = client.GetAsync("http://api.bris.tech/sessionsummaries").Result.Content.ReadAsStringAsync().Result
+            Log.Information("Sessions endpoint found")
             Some (JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson))
         with
             // Endpoint not found
-            | :? AggregateException -> None
+            | :? AggregateException ->
+                Log.Information("Could not reach sessions endpoint")
+                None
     
     match sessions with
         | Some sessions ->
