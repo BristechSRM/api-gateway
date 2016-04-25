@@ -1,8 +1,8 @@
-﻿namespace DTOs
+﻿namespace Dtos
 
 open System
 
-type SessionSummaryDTO =
+type SessionSummaryDto =
     { Id : Guid
       Title : string
       Status : string
@@ -18,7 +18,7 @@ type SessionSummaryDTO =
       AdminImageUrl : string
       ThreadId : Guid }
 
-type LastContactDTO =
+type LastContactDto =
     { ThreadId : Guid
       Date : string
       SenderId : Guid

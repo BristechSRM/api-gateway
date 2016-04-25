@@ -3,13 +3,13 @@
 open System
 open System.Net.Http
 open Newtonsoft.Json
-open DTOs
+open Dtos
 open Models
 
-let convertToLastContactSummary (dto : LastContactDTO) : LastContactSummary =
+let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
     new LastContactSummary(dto.Date, dto.SenderId, dto.ReceiverId)
 
-let convertToSessionSummary (lastContacts, session: SessionSummaryDTO) : SessionSummary =
+let convertToSessionSummary (lastContacts, session: SessionSummaryDto) : SessionSummary =
     let lastContact =
         match lastContacts |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals session.ThreadId) with
         | Some lastContact -> convertToLastContactSummary lastContact
@@ -34,7 +34,7 @@ let getLastContacts() =
 
     try
         let lastContactJson = client.GetAsync("http://api.bris.tech:8080/last-contact").Result.Content.ReadAsStringAsync().Result
-        JsonConvert.DeserializeObject<LastContactDTO[]>(lastContactJson)
+        JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
     with
         // Endpoint not found
         | :? AggregateException -> [||]
@@ -45,7 +45,7 @@ let getSessions() =
     let sessions =
         try
             let sessionJson = client.GetAsync("http://api.bris.tech/sessionsummaries").Result.Content.ReadAsStringAsync().Result
-            Some (JsonConvert.DeserializeObject<SessionSummaryDTO[]>(sessionJson))
+            Some (JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson))
         with
             // Endpoint not found
             | :? AggregateException -> None
