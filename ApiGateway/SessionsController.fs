@@ -12,4 +12,6 @@ type SessionsController() =
     member x.Get() =
         Log.Information("Received GET request for sessions")
         let sessions = getSessions()
-        x.Request.CreateResponse(sessions)
+        match sessions with
+        | Some sessions -> x.Request.CreateResponse(sessions)
+        | None -> x.Request.CreateResponse(HttpStatusCode.InternalServerError)

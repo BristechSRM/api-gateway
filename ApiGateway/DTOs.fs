@@ -2,16 +2,6 @@
 
 open System
 
-type SessionDTO =
-    { Id : Guid
-      Title : string
-      Status : string
-      Date : string
-      SpeakerId : Guid
-      AdminId : Guid
-      ThreadId : Guid
-      DateAdded : string }
-
 type SessionSummaryDTO =
     { Id : Guid
       Title : string

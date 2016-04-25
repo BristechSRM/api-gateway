@@ -2,7 +2,6 @@
 
 open System
 open System.Net.Http
-open System.Threading.Tasks
 open Newtonsoft.Json
 open DTOs
 open Models
@@ -30,13 +29,30 @@ let convertToSessionSummary (lastContacts, session: SessionSummaryDTO) : Session
       AdminImageUri = session.AdminImageUrl
       LastContact = lastContact }
 
+let getLastContacts() =
+    use client = new HttpClient()
+
+    try
+        let lastContactJson = client.GetAsync("http://api.bris.tech:8080/last-contact").Result.Content.ReadAsStringAsync().Result
+        JsonConvert.DeserializeObject<LastContactDTO[]>(lastContactJson)
+    with
+        // Endpoint not found
+        | :? AggregateException -> [||]
+
 let getSessions() = 
     use client = new HttpClient()
-    let sessionJson = client.GetAsync("http://localhost:9000/sessionsummaries").Result.Content.ReadAsStringAsync().Result
-    let sessions = JsonConvert.DeserializeObject<SessionSummaryDTO[]>(sessionJson)
 
-    let lastContactJson = client.GetAsync("http://api.bris.tech:8080/last-contact").Result.Content.ReadAsStringAsync().Result
-    let lastContacts = JsonConvert.DeserializeObject<LastContactDTO[]>(lastContactJson)
-
-    sessions |> Seq.map (fun session -> convertToSessionSummary(lastContacts, session))
+    let sessions =
+        try
+            let sessionJson = client.GetAsync("http://api.bris.tech/sessionsummaries").Result.Content.ReadAsStringAsync().Result
+            Some (JsonConvert.DeserializeObject<SessionSummaryDTO[]>(sessionJson))
+        with
+            // Endpoint not found
+            | :? AggregateException -> None
+    
+    match sessions with
+        | Some sessions ->
+            let lastContacts = getLastContacts()
+            Some (sessions |> Seq.map (fun session -> convertToSessionSummary(lastContacts, session)))
+        | None -> None
 
