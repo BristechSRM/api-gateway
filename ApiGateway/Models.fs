@@ -7,9 +7,9 @@ type ErrorResponse =
     { HttpStatusCode : HttpStatusCode
       Body : string }
 
-type Result<'Success> =
+type Result<'Success, 'Failure> =
     | Success of 'Success
-    | Failure of ErrorResponse
+    | Failure of 'Failure
 
 [<AllowNullLiteral>]
 type LastContactSummary(date, senderId, receiverId) =
