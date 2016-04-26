@@ -48,3 +48,7 @@ type SessionDetail =
       AdminImageUri : string
       LastContact : LastContactSummary option
       ThreadId : Guid }
+
+type EventSummary =
+    { Date : string
+      Sessions : Guid[] }
