@@ -10,9 +10,9 @@ open Models
 
 let sessionsUri = "http://api.bris.tech/sessionsummaries/"
 
-let getIds (sessions: SessionSummaryDto seq) =
+let getIds (sessions: SessionSummaryDto[]) =
     sessions
-    |> Seq.map (fun session -> session.Id)
+    |> Array.map (fun session -> session.Id)
 
 let getEvents() = 
     use client = new HttpClient()
@@ -26,9 +26,9 @@ let getEvents() =
             let sessions = JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
             let events =
                 sessions
-                |> Seq.filter (fun session -> not <| isNull session.Date)
-                |> Seq.groupBy (fun session -> session.Date)
-                |> Seq.map (fun (date, sessions) -> {Date = date; Sessions = getIds sessions})
+                |> Array.filter (fun session -> not <| isNull session.Date)
+                |> Array.groupBy (fun session -> session.Date)
+                |> Array.map (fun (date, eventSessions) -> {Date = date; Sessions = getIds eventSessions})
             Success(events)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
@@ -53,8 +53,8 @@ let getEvent(date) =
             Log.Information("Sessions endpoint found")
             let sessions =
                 JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
-                |> Seq.filter (fun session -> not <| isNull session.Date && session.Date.Equals(date))
-                |> Seq.map (fun session -> session.Id)
+                |> Array.filter (fun session -> not <| isNull session.Date && session.Date.Equals(date))
+                |> Array.map (fun session -> session.Id)
             let event = { Date = date; Sessions = sessions }
             Success(event)
         | _ ->

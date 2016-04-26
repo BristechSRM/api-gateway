@@ -51,4 +51,4 @@ type SessionDetail =
 
 type EventSummary =
     { Date : string
-      Sessions : Guid seq }
+      Sessions : Guid[] }
