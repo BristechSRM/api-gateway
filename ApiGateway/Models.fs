@@ -1,12 +1,20 @@
 ﻿namespace Models
 
 open System
+open System.Net
 
-[<AllowNullLiteral>]
-type LastContactSummary(date, senderId, receiverId) =
-    member x.Date with get() = date
-    member x.SenderId with get() = senderId
-    member x.ReceiverId with get() = receiverId
+type ErrorResponse =
+    { HttpStatusCode : HttpStatusCode
+      Body : string }
+
+type Result<'Success, 'Failure> =
+    | Success of 'Success
+    | Failure of 'Failure
+
+type LastContactSummary =
+    { Date : string
+      SenderId : Guid
+      ReceiverId : Guid }
 
 type SessionSummary =
     { Id : Guid
@@ -22,4 +30,21 @@ type SessionSummary =
       AdminForename : string
       AdminSurname : string
       AdminImageUri : string
-      LastContact : LastContactSummary }
+      LastContact : LastContactSummary option }
+
+type SessionDetail =
+    { Id : Guid
+      Title : string
+      Status : string
+      Date : string
+      DateAdded : string
+      SpeakerId : Guid
+      SpeakerForename : string
+      SpeakerSurname : string
+      SpeakerImageUri : string
+      AdminId : Guid
+      AdminForename : string
+      AdminSurname : string
+      AdminImageUri : string
+      LastContact : LastContactSummary option
+      ThreadId : Guid }
