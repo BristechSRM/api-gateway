@@ -7,15 +7,14 @@ type ErrorResponse =
     { HttpStatusCode : HttpStatusCode
       Body : string }
 
-type Result<'Success> =
+type Result<'Success, 'Failure> =
     | Success of 'Success
-    | Failure of ErrorResponse
+    | Failure of 'Failure
 
-[<AllowNullLiteral>]
-type LastContactSummary(date, senderId, receiverId) =
-    member x.Date with get() = date
-    member x.SenderId with get() = senderId
-    member x.ReceiverId with get() = receiverId
+type LastContactSummary =
+    { Date : string
+      SenderId : Guid
+      ReceiverId : Guid }
 
 type SessionSummary =
     { Id : Guid
@@ -31,7 +30,7 @@ type SessionSummary =
       AdminForename : string
       AdminSurname : string
       AdminImageUri : string
-      LastContact : LastContactSummary }
+      LastContact : LastContactSummary option }
 
 type SessionDetail =
     { Id : Guid
@@ -47,7 +46,7 @@ type SessionDetail =
       AdminForename : string
       AdminSurname : string
       AdminImageUri : string
-      LastContact : LastContactSummary
+      LastContact : LastContactSummary option
       ThreadId : Guid }
 
 type EventSummary =

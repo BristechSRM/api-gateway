@@ -12,12 +12,12 @@ let sessionsUri = "http://api.bris.tech/sessionsummaries/"
 let lastContactUri = "http://api.bris.tech:8080/last-contact/"
 
 let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
-    new LastContactSummary(dto.Date, dto.SenderId, dto.ReceiverId)
+    { Date = dto.Date; SenderId = dto.SenderId; ReceiverId = dto.ReceiverId }
 
 let getLastContact (threadId, lastContacts : LastContactDto[]) =
     match lastContacts |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId) with
-        | Some lastContact -> convertToLastContactSummary lastContact
-        | None -> null
+        | Some lastContact -> Some(convertToLastContactSummary lastContact)
+        | None -> None
 
 let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
     { Id = session.Id
@@ -60,7 +60,6 @@ let getLastContacts() =
         Log.Information("Last contact endpoint found")
         JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
     with
-        // Endpoint not found
         | :? AggregateException ->
             Log.Information("Could not reach last contact endpoint")
             [||]
@@ -81,7 +80,6 @@ let getSessions() =
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        // Endpoint not found
         | :? AggregateException ->
             Log.Information("Could not reach sessions endpoint")
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
@@ -105,7 +103,6 @@ let getSession(id : Guid) =
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        // Endpoint not found
         | :? AggregateException ->
             Log.Information("Could not reach session endpoint")
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
