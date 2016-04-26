@@ -49,3 +49,7 @@ type SessionDetail =
       AdminImageUri : string
       LastContact : LastContactSummary
       ThreadId : Guid }
+
+type EventSummary =
+    { Date : string
+      Sessions : Guid seq }
