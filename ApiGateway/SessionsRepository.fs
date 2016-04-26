@@ -12,12 +12,12 @@ let sessionsUri = "http://api.bris.tech/sessionsummaries/"
 let lastContactUri = "http://api.bris.tech:8080/last-contact/"
 
 let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
-    new LastContactSummary(dto.Date, dto.SenderId, dto.ReceiverId)
+    { Date = dto.Date; SenderId = dto.SenderId; ReceiverId = dto.ReceiverId }
 
 let getLastContact (threadId, lastContacts : LastContactDto[]) =
     match lastContacts |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId) with
-        | Some lastContact -> convertToLastContactSummary lastContact
-        | None -> null
+        | Some lastContact -> Some(convertToLastContactSummary lastContact)
+        | None -> None
 
 let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
     { Id = session.Id
