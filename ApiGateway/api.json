@@ -60,12 +60,45 @@
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/Event"
+                                "$ref": "#/definitions/EventSummary"
                             }
                         }
                     },
                     "500": {
                         "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{eventId}": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Retrieves the details of the specified event.",
+                "description": "The full event details are retrieved.",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "eventId",
+                        "description": "The event identifier",
+                        "required": true,
+                        "type": "string",
+                        "format": "guid"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The event is found.",
+                        "schema": {
+                            "$ref": "#/definitions/EventDetail"
+                        }
+                    },
+                    "404": {
+                        "description": "The event does not exist.",
                         "schema": {
                             "$ref": "#/definitions/Error"
                         }
@@ -505,11 +538,11 @@
                 }
             }
         },
-        "Event": {
+        "EventSummary": {
             "type": "object",
             "required": [
                 "id",
-                "date"
+                "sessions"
             ],
             "properties": {
                 "id": {
@@ -529,7 +562,106 @@
                 "location": {
                     "type": "string",
                     "description": "The location of the event"
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "guid",
+                        "description": "The ids of the event sessions"
+                    }
                 }
+            }
+        },
+        "EventDetail": {
+            "type": "object",
+            "required": [
+                "id",
+                "sessions"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the event"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The date of the event"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "A description of the event"
+                },
+                "location": {
+                    "type": "string",
+                    "description": "The location of the event"
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/EventSession"
+                    }
+                }
+            }
+        },
+        "EventSession": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The session unique identifier"
+                },
+                "title": {
+                    "type": "string",
+                    "description": "The title of the session"
+                },
+                "description": {
+                    "type": "string",
+                    "description": "The description of the session"
+                },
+                "speakerId": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The speaker unique identifier"
+                },
+                "speakerForename": {
+                    "type": "string",
+                    "description": "The forename of the speaker"
+                },
+                "speakerSurname": {
+                    "type": "string",
+                    "description": "The surname of the speaker"
+                },
+                "speakerBio": {
+                    "type": "string",
+                    "description": "The speaker biography"
+                },
+                "speakerImageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The uri of the speaker's avatar"
+                },
+                "speakerRating": {
+                    "type": "integer",
+                    "description": "A rating of the profile (from 1 to 5)"
+                },
+                "startDate": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The start datetime of the session",
+                },
+                "endDate": {
+                    "type": "string",
+                    "format": "ISO 8601",
+                    "description": "The end datetime of the session",
+                },
+                
             }
         },
         "CorrespondenceItem": {
