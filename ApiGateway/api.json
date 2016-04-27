@@ -609,7 +609,8 @@
         "EventSession": {
             "type": "object",
             "required": [
-                "id"
+                "id",
+                "speakerId"
             ],
             "properties": {
                 "id": {
@@ -654,14 +655,13 @@
                 "startDate": {
                     "type": "string",
                     "format": "ISO 8601",
-                    "description": "The start datetime of the session",
+                    "description": "The start datetime of the session"
                 },
                 "endDate": {
                     "type": "string",
                     "format": "ISO 8601",
-                    "description": "The end datetime of the session",
-                },
-                
+                    "description": "The end datetime of the session"
+                }
             }
         },
         "CorrespondenceItem": {
