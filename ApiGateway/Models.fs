@@ -49,6 +49,29 @@ type SessionDetail =
       LastContact : LastContactSummary option
       ThreadId : Guid }
 
+type EventSession =
+    { Id : Guid
+      Title : string
+      Description : string
+      SpeakerId : Guid
+      SpeakerForename : string
+      SpeakerSurname : string
+      SpeakerBio : string
+      SpeakerImageUri : string
+      SpeakerRating : int
+      StartDate : string
+      EndDate : string }
+
 type EventSummary =
-    { Date : string
+    { Id : string
+      Date : string
+      Description : string
+      Location : string
       Sessions : Guid[] }
+
+type EventDetail =
+    { Id : string
+      Date : string
+      Description : string
+      Location : string
+      Sessions : EventSession[] }

@@ -10,9 +10,36 @@ open Models
 
 let sessionsUri = "http://api.bris.tech/sessionsummaries/"
 
+let convertToDateTime iso =
+    DateTime.Parse(iso, null, System.Globalization.DateTimeStyles.RoundtripKind)
+
+let convertToISO8601 (datetime : DateTime) =
+    datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
+
 let getIds (sessions: SessionSummaryDto[]) =
     sessions
     |> Array.map (fun session -> session.Id)
+
+let onSameDay iso1 iso2 =
+    let datetime1 = convertToDateTime iso1
+    let datetime2 = convertToDateTime iso2
+    datetime1.Date = datetime2.Date
+
+let convertToEventSession (session: SessionSummaryDto) =
+    let endDate =
+        (convertToDateTime session.Date).AddHours(1.0)
+        |> convertToISO8601
+    { Id = session.Id
+      Title = session.Title
+      Description = ""
+      SpeakerId = session.SpeakerId
+      SpeakerForename = session.SpeakerForename
+      SpeakerSurname = session.SpeakerSurname
+      SpeakerBio = ""
+      SpeakerImageUri = session.SpeakerImageUrl
+      SpeakerRating = session.SpeakerRating
+      StartDate = session.Date
+      EndDate = endDate }
 
 let getEvents() = 
     use client = new HttpClient()
@@ -28,7 +55,7 @@ let getEvents() =
                 sessions
                 |> Array.filter (fun session -> not <| isNull session.Date)
                 |> Array.groupBy (fun session -> session.Date)
-                |> Array.map (fun (date, eventSessions) -> {Date = date; Sessions = getIds eventSessions})
+                |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date; Date = date; Description = ""; Location = ""; Sessions = getIds eventSessions})
             Success(events)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
@@ -53,9 +80,9 @@ let getEvent(date) =
             Log.Information("Sessions endpoint found")
             let sessions =
                 JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
-                |> Array.filter (fun session -> not <| isNull session.Date && session.Date.Equals(date))
-                |> Array.map (fun session -> session.Id)
-            let event = { Date = date; Sessions = sessions }
+                |> Array.filter (fun session -> not <| isNull session.Date && onSameDay session.Date date)
+                |> Array.map convertToEventSession
+            let event = { Id = date; Date = date; Description = ""; Location = ""; Sessions = sessions }
             Success(event)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
