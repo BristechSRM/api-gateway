@@ -21,6 +21,6 @@ type SessionSummaryDto =
 
 type LastContactDto =
     { ThreadId : Guid
-      Date : string
+      Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }

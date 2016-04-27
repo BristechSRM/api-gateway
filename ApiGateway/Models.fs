@@ -12,7 +12,7 @@ type Result<'Success, 'Failure> =
     | Failure of 'Failure
 
 type LastContactSummary =
-    { Date : string
+    { Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }
 
