@@ -74,5 +74,4 @@ type EventDetail =
       Date : string
       Description : string
       Location : string
-      Sessions : EventSession[]
-    }
+      Sessions : EventSession[] }
