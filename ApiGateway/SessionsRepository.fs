@@ -23,7 +23,7 @@ let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionS
     { Id = session.Id
       Title = session.Title
       Status = session.Status
-      Date = session.Date
+      Date = Option.ofNullable session.Date
       SpeakerId = session.SpeakerId
       SpeakerForename = session.SpeakerForename
       SpeakerSurname = session.SpeakerSurname
@@ -39,7 +39,7 @@ let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSu
     { Id = session.Id
       Title = session.Title
       Status = session.Status
-      Date = session.Date
+      Date = Option.ofNullable session.Date
       DateAdded = session.DateAdded
       SpeakerId = session.SpeakerId
       SpeakerForename = session.SpeakerForename

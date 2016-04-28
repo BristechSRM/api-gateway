@@ -12,7 +12,7 @@ type Result<'Success, 'Failure> =
     | Failure of 'Failure
 
 type LastContactSummary =
-    { Date : string
+    { Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }
 
@@ -20,7 +20,7 @@ type SessionSummary =
     { Id : Guid
       Title : string
       Status : string
-      Date : string
+      Date : DateTime option
       SpeakerId : Guid
       SpeakerForename : string
       SpeakerSurname : string
@@ -36,7 +36,7 @@ type SessionDetail =
     { Id : Guid
       Title : string
       Status : string
-      Date : string
+      Date : DateTime option
       DateAdded : string
       SpeakerId : Guid
       SpeakerForename : string
@@ -59,19 +59,19 @@ type EventSession =
       SpeakerBio : string
       SpeakerImageUri : string
       SpeakerRating : int
-      StartDate : string
-      EndDate : string }
+      StartDate : DateTime option
+      EndDate : DateTime option }
 
 type EventSummary =
     { Id : string
-      Date : string
+      Date : DateTime
       Description : string
       Location : string
       Sessions : Guid[] }
 
 type EventDetail =
     { Id : string
-      Date : string
+      Date : DateTime
       Description : string
       Location : string
       Sessions : EventSession[] }

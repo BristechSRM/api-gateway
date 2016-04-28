@@ -10,9 +10,6 @@ open Models
 
 let sessionsUri = "http://api.bris.tech/sessionsummaries/"
 
-let convertToDateTime iso =
-    DateTime.Parse(iso, null, System.Globalization.DateTimeStyles.RoundtripKind)
-
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
 
@@ -20,15 +17,15 @@ let getIds (sessions: SessionSummaryDto[]) =
     sessions
     |> Array.map (fun session -> session.Id)
 
-let onSameDay iso1 iso2 =
-    let datetime1 = convertToDateTime iso1
-    let datetime2 = convertToDateTime iso2
+let onSameDay (datetime1: DateTime) (datetime2: DateTime) =
     datetime1.Date = datetime2.Date
 
 let convertToEventSession (session: SessionSummaryDto) =
+    let startDate = Option.ofNullable session.Date
     let endDate =
-        (convertToDateTime session.Date).AddHours(1.0)
-        |> convertToISO8601
+        match startDate with
+        | Some date -> Some <| date.AddHours(1.0)
+        | None -> None
     { Id = session.Id
       Title = session.Title
       Description = ""
@@ -38,7 +35,7 @@ let convertToEventSession (session: SessionSummaryDto) =
       SpeakerBio = ""
       SpeakerImageUri = session.SpeakerImageUrl
       SpeakerRating = session.SpeakerRating
-      StartDate = session.Date
+      StartDate = startDate
       EndDate = endDate }
 
 let getEvents() = 
@@ -53,9 +50,9 @@ let getEvents() =
             let sessions = JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
             let events =
                 sessions
-                |> Array.filter (fun session -> not <| isNull session.Date)
-                |> Array.groupBy (fun session -> session.Date)
-                |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date; Date = date; Description = ""; Location = ""; Sessions = getIds eventSessions})
+                |> Array.filter (fun session -> session.Date.HasValue)
+                |> Array.groupBy (fun session -> session.Date.Value)
+                |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = getIds eventSessions})
             Success(events)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
@@ -69,10 +66,11 @@ let getEvents() =
             Log.Information("Unhandled exception: {message}", ex.Message)
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
 
-let getEvent(date) =
+let getEvent(id) =
     use client = new HttpClient()
 
     try
+        let date = DateTime.Parse(id, null, System.Globalization.DateTimeStyles.RoundtripKind)
         let result = client.GetAsync(sessionsUri).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
@@ -80,9 +78,9 @@ let getEvent(date) =
             Log.Information("Sessions endpoint found")
             let sessions =
                 JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
-                |> Array.filter (fun session -> not <| isNull session.Date && onSameDay session.Date date)
+                |> Array.filter (fun session -> session.Date.HasValue && onSameDay session.Date.Value date)
                 |> Array.map convertToEventSession
-            let event = { Id = date; Date = date; Description = ""; Location = ""; Sessions = sessions }
+            let event = { Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
             Success(event)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
@@ -92,6 +90,9 @@ let getEvent(date) =
         | :? AggregateException ->
             Log.Information("Could not reach sessions endpoint")
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
+        | :? FormatException ->
+            Log.Information("Event not found")
+            Failure { HttpStatusCode = HttpStatusCode.NotFound; Body = "Event not found" }
         | ex ->
             Log.Information("Unhandled exception: {message}", ex.Message)
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }

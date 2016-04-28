@@ -17,7 +17,7 @@ type EventsController() =
         | Failure error -> x.Request.CreateResponse(error.HttpStatusCode, error.Body)
 
     member x.Get(id : string) =
-        Log.Information("Received GET request for event on date {date}", id)
+        Log.Information("Received GET request for event with id {id}", id)
         match getEvent(id) with
         | Success event -> x.Request.CreateResponse(event)
         | Failure error -> x.Request.CreateResponse(error.HttpStatusCode, error.Body)
