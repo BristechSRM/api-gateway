@@ -6,7 +6,7 @@ type SessionSummaryDto =
     { Id : Guid
       Title : string
       Status : string
-      Date : string
+      Date : Nullable<DateTime>
       DateAdded : string
       SpeakerId : Guid
       SpeakerForename : string
