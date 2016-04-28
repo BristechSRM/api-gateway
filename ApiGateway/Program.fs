@@ -1,10 +1,10 @@
-module Program
-
 open Bristech.Srm.HttpConfig
-open Microsoft.Owin.Hosting
-open System.Threading
 open Logging
+open Microsoft.Owin.Hosting
+open Owin
 open Serilog
+open StartupConfig
+open System.Threading
 
 (*
     Note: When running this app from Visual studio / On Windows / Possibly with mono develop (Not checked)
@@ -23,17 +23,19 @@ let main _ =
 
     JsonSettings.setDefaults()
     setupLogging()
-
     let baseAddress = "http://*:9004"
-    use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseAddress)
+    
+    use server = 
+        WebApp.Start(baseAddress, 
+                     (fun appBuilder -> 
+                     let config = Default.config //|> configureFilters
+                     appBuilder.UseWebApi(config) |> ignore))
     Log.Information("Listening on {Address}", baseAddress)
-
     (*
         Because of the way the self hosted server works, it is waiting asynchronously for requests. 
         It starts running then returns to our code, meaning our program will exit. 
         This code will wait indefinitely for a signal so that the overall project will continue to run.
     *)
-    
     let waitIndefinitelyWithToken = 
         let cancelSource = new CancellationTokenSource()
         cancelSource.Token.WaitHandle.WaitOne() |> ignore
