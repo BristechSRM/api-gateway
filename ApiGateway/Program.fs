@@ -1,4 +1,3 @@
-open Bristech.Srm.HttpConfig
 open Logging
 open Microsoft.Owin.Hosting
 open Serilog
