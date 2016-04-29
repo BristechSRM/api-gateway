@@ -1,9 +1,7 @@
 open Bristech.Srm.HttpConfig
 open Logging
 open Microsoft.Owin.Hosting
-open Owin
 open Serilog
-open StartupConfig
 open System.Threading
 
 (*
@@ -22,12 +20,8 @@ open System.Threading
 let main _ = 
     setupLogging()
     let baseAddress = "http://*:9004"
-    
     use server = 
-        WebApp.Start(baseAddress, 
-                     (fun appBuilder -> 
-                     let config = Default.config //|> configureFilters
-                     appBuilder.UseWebApi(config) |> ignore))
+        WebApp.Start(baseAddress, StartupConfig.configure)
     Log.Information("Listening on {Address}", baseAddress)
     (*
         Because of the way the self hosted server works, it is waiting asynchronously for requests. 
