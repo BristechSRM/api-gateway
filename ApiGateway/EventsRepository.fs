@@ -80,7 +80,7 @@ let getEvent(id) =
                 JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
                 |> Array.filter (fun session -> session.Date.HasValue && onSameDay session.Date.Value date)
                 |> Array.map convertToEventSession
-            let event = { Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
+            let event = { EventDetail.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
             Success(event)
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)

@@ -24,3 +24,15 @@ type LastContactDto =
       Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }
+
+type HandleDto =
+    { Type : string
+      Identifier : string }
+
+type ProfileDto =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      ImageUrl : string
+      Rating : int
+      Handles : HandleDto[] }

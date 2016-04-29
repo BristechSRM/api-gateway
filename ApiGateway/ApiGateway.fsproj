@@ -33,9 +33,12 @@
     <Compile Include="Models.fs" />
     <Compile Include="DocsController.fs" />
     <Compile Include="EventsRepository.fs" />
+    <Compile Include="ProfilesRepository.fs" />
     <Compile Include="SessionsRepository.fs" />
+    <Compile Include="AdminsController.fs" />
     <Compile Include="EventsController.fs" />
     <Compile Include="SessionsController.fs" />
+    <Compile Include="SpeakersController.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <Content Include="app.config">

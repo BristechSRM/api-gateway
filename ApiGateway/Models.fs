@@ -75,3 +75,23 @@ type EventDetail =
       Description : string
       Location : string
       Sessions : EventSession[] }
+
+type Handle =
+    { Type : string
+      Identifier : string }
+
+type Speaker =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      Rating : int
+      ImageUri : string
+      Bio : string
+      Handles : Handle[] }
+
+type Admin =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      ImageUri : string
+      Handles : Handle[] }
