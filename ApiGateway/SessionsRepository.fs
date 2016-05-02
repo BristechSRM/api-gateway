@@ -28,9 +28,9 @@ let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
     { Date = dto.Date; SenderId = dto.SenderId; ReceiverId = dto.ReceiverId }
 
 let getLastContact (threadId, lastContacts : LastContactDto[]) =
-    match lastContacts |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId) with
-        | Some lastContact -> Some(convertToLastContactSummary lastContact)
-        | None -> None
+    lastContacts
+    |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId)
+    |> Option.map convertToLastContactSummary
 
 let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
     { Id = session.Id
@@ -38,10 +38,7 @@ let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionS
       Status = session.Status
       Date = session.Date
       Speaker = session.Speaker |> convertToSpeakerSummary
-      Admin =
-        match session.Admin with
-        | Some admin -> admin |>  convertToAdminSummary |> Some
-        | None -> None
+      Admin = session.Admin |> Option.map convertToAdminSummary
       LastContact = getLastContact(session.ThreadId, lastContacts) }
 
 let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionDetail =
@@ -51,10 +48,7 @@ let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSu
       Date = session.Date
       DateAdded = session.DateAdded
       Speaker = session.Speaker |> convertToSpeakerSummary
-      Admin =
-        match session.Admin with
-        | Some admin -> admin |>  convertToAdminSummary |> Some
-        | None -> None
+      Admin = session.Admin |> Option.map convertToAdminSummary
       LastContact = getLastContact(session.ThreadId, lastContacts)
       ThreadId = session.ThreadId }
 

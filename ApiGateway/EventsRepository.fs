@@ -21,10 +21,6 @@ let onSameDay (datetime1: DateTime) (datetime2: DateTime) =
     datetime1.Date = datetime2.Date
 
 let convertToEventSession (session: SessionSummaryDto) =
-    let endDate =
-        match session.Date with
-        | Some date -> Some <| date.AddHours(1.0)
-        | None -> None
     { Id = session.Id
       Title = session.Title
       Description = ""
@@ -35,7 +31,7 @@ let convertToEventSession (session: SessionSummaryDto) =
       SpeakerImageUri = session.Speaker.ImageUri
       SpeakerRating = session.Speaker.Rating
       StartDate = session.Date
-      EndDate = endDate }
+      EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
 
 let getEvents() = 
     use client = new HttpClient()
