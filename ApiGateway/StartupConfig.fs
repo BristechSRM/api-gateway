@@ -27,6 +27,7 @@ let configureWebApi (app : IAppBuilder) =
     app.UseWebApi(config) 
 
 let configure (app : IAppBuilder) = 
+    Log.Information("Performing Custom Auth configuration")
     app 
     |> configureBearerTokenAuth
     |> configureDataProtection
