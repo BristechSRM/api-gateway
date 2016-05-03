@@ -7,7 +7,8 @@ type SpeakerSummaryDto =
       Forename : string
       Surname : string
       Rating : int
-      ImageUri : string }
+      ImageUri : string
+      Bio : string }
 
 type AdminSummaryDto =
     { Id : Guid
@@ -18,6 +19,7 @@ type AdminSummaryDto =
 type SessionSummaryDto =
     { Id : Guid
       Title : string
+      Description : string
       Status : string
       Date : DateTime option
       DateAdded : string
@@ -41,4 +43,5 @@ type ProfileDto =
       Surname : string
       ImageUrl : string
       Rating : int
+      Bio : string
       Handles : HandleDto[] }
