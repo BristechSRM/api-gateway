@@ -11,6 +11,19 @@ type Result<'Success, 'Failure> =
     | Success of 'Success
     | Failure of 'Failure
 
+type SpeakerSummary =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      Rating : int
+      ImageUri : string }
+
+type AdminSummary =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      ImageUri : string }
+
 type LastContactSummary =
     { Date : DateTime
       SenderId : Guid
@@ -21,15 +34,8 @@ type SessionSummary =
       Title : string
       Status : string
       Date : DateTime option
-      SpeakerId : Guid
-      SpeakerForename : string
-      SpeakerSurname : string
-      SpeakerImageUri : string
-      SpeakerRating : int
-      AdminId : Guid
-      AdminForename : string
-      AdminSurname : string
-      AdminImageUri : string
+      Speaker : SpeakerSummary
+      Admin : AdminSummary option
       LastContact : LastContactSummary option }
 
 type SessionDetail =
@@ -38,14 +44,8 @@ type SessionDetail =
       Status : string
       Date : DateTime option
       DateAdded : string
-      SpeakerId : Guid
-      SpeakerForename : string
-      SpeakerSurname : string
-      SpeakerImageUri : string
-      AdminId : Guid
-      AdminForename : string
-      AdminSurname : string
-      AdminImageUri : string
+      Speaker : SpeakerSummary
+      Admin : AdminSummary option
       LastContact : LastContactSummary option
       ThreadId : Guid }
 
@@ -75,3 +75,23 @@ type EventDetail =
       Description : string
       Location : string
       Sessions : EventSession[] }
+
+type Handle =
+    { Type : string
+      Identifier : string }
+
+type Speaker =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      Rating : int
+      ImageUri : string
+      Bio : string
+      Handles : Handle[] }
+
+type Admin =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      ImageUri : string
+      Handles : Handle[] }

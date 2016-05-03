@@ -282,9 +282,7 @@
                 "id",
                 "title",
                 "status",
-                "speakerId",
-                "speakerForename",
-                "speakerSurname"
+                "speaker"
             ],
             "properties": {
                 "id": {
@@ -313,45 +311,11 @@
                     "format": "ISO 8601",
                     "description": "The date of the session"
                 },
-                "speakerId": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique identifier of the speaker for the session"
+                "speaker": {
+                    "$ref": "#/definitions/SpeakerSummary",
                 },
-                "speakerForename": {
-                    "type": "string",
-                    "description": "The forename of the speaker"
-                },
-                "speakerSurname": {
-                    "type": "string",
-                    "description": "The surname of the speaker"
-                },
-                "speakerImageUri": {
-                    "type": "string",
-                    "format": "uri",
-                    "description": "The uri of the speaker's avatar"
-                },
-                "speakerRating": {
-                    "type": "integer",
-                    "description": "A rating of the profile (from 1 to 5)"
-                },
-                "adminId": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique identifier of the administrator for the session"
-                },
-                "adminForname": {
-                    "type": "string",
-                    "description": "The forename of the admin"
-                },
-                "adminSurname": {
-                    "type": "string",
-                    "description": "The surname of the admin"
-                },
-                "adminImageUri": {
-                    "type": "string",
-                    "format": "uri",
-                    "description": "The uri of the admin's avatar"
+                "admin": {
+                    "$ref": "#/definitions/AdminSummary",
                 },
                 "lastContact": {
                     "type": "object",
@@ -367,9 +331,7 @@
                 "title",
                 "status",
                 "dateAdded",
-                "speakerId",
-                "speakerForename",
-                "speakerSurname"
+                "speaker"
             ],
             "properties": {
                 "id": {
@@ -403,41 +365,11 @@
                     "format": "ISO 8601",
                     "description": "The time the session was added to the system"
                 },
-                "speakerId": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique identifier of the session speaker"
+                "speaker": {
+                    "$ref": "#/definitions/SpeakerSummary",
                 },
-                "speakerForename": {
-                    "type": "string",
-                    "description": "The forename of the speaker"
-                },
-                "speakerSurname": {
-                    "type": "string",
-                    "description": "The surname of the speaker"
-                },
-                "speakerImageUri": {
-                    "type": "string",
-                    "format": "uri",
-                    "description": "The URI of the speaker's avatar"
-                },
-                "adminId": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique identifier of the session administrator"
-                },
-                "adminForname": {
-                    "type": "string",
-                    "description": "The forename of the admin"
-                },
-                "adminSurname": {
-                    "type": "string",
-                    "description": "The surname of the admin"
-                },
-                "adminImageUri": {
-                    "type": "string",
-                    "format": "uri",
-                    "description": "The URI of the admin's avatar"
+                "admin": {
+                    "$ref": "#/definitions/AdminSummary",
                 },
                 "lastContact": {
                     "type": "object",
@@ -480,11 +412,45 @@
                     "type": "integer",
                     "description": "The speaker's credibility rating (1 to 5)"
                 },
+                "bio": {
+                    "type": "string",
+                    "description": "The speaker's biography"
+                },
                 "handles": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/HandleSummary"
                     }
+                }
+            }
+        },
+        "SpeakerSummary": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the speaker"
+                },
+                "forename": {
+                    "type": "string",
+                    "description": "The speaker's forename"
+                },
+                "surname": {
+                    "type": "string",
+                    "description": "The speaker's surname"
+                },
+                "imageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the speaker's avatar"
+                },
+                "rating": {
+                    "type": "integer",
+                    "description": "The speaker's credibility rating (1 to 5)"
                 }
             }
         },
@@ -518,6 +484,32 @@
                     "items": {
                         "$ref": "#/definitions/HandleSummary"
                     }
+                }
+            }
+        },
+        "AdminSummary": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "guid",
+                    "description": "The unique identifier of the admin"
+                },
+                "forename": {
+                    "type": "string",
+                    "description": "The admin's forename"
+                },
+                "surname": {
+                    "type": "string",
+                    "description": "The admin's surname"
+                },
+                "imageUri": {
+                    "type": "string",
+                    "format": "uri",
+                    "description": "The URI of the admin's avatar"
                 }
             }
         },

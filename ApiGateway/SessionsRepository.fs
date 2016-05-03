@@ -1,5 +1,5 @@
 ﻿module SessionsRepository
-
+open Bristech.Srm.HttpConfig
 open System
 open System.Net
 open System.Net.Http
@@ -11,44 +11,44 @@ open Models
 let sessionsUri = "http://api.bris.tech/sessions/"
 let lastContactUri = "http://api.bris.tech:8080/last-contact/"
 
+let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
+    { Id = dto.Id
+      Forename = dto.Forename
+      Surname = dto.Surname
+      Rating = dto.Rating
+      ImageUri = dto.ImageUri }
+
+let convertToAdminSummary (dto : AdminSummaryDto) : AdminSummary =
+    { Id = dto.Id
+      Forename = dto.Forename
+      Surname = dto.Surname
+      ImageUri = dto.ImageUri }
+
 let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
     { Date = dto.Date; SenderId = dto.SenderId; ReceiverId = dto.ReceiverId }
 
 let getLastContact (threadId, lastContacts : LastContactDto[]) =
-    match lastContacts |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId) with
-        | Some lastContact -> Some(convertToLastContactSummary lastContact)
-        | None -> None
+    lastContacts
+    |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId)
+    |> Option.map convertToLastContactSummary
 
 let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
     { Id = session.Id
       Title = session.Title
       Status = session.Status
-      Date = Option.ofNullable session.Date
-      SpeakerId = session.SpeakerId
-      SpeakerForename = session.SpeakerForename
-      SpeakerSurname = session.SpeakerSurname
-      SpeakerImageUri = session.SpeakerImageUrl
-      SpeakerRating = session.SpeakerRating
-      AdminId = session.AdminId
-      AdminForename = session.AdminForename
-      AdminSurname = session.AdminSurname
-      AdminImageUri = session.AdminImageUrl
+      Date = session.Date
+      Speaker = session.Speaker |> convertToSpeakerSummary
+      Admin = session.Admin |> Option.map convertToAdminSummary
       LastContact = getLastContact(session.ThreadId, lastContacts) }
 
 let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionDetail =
     { Id = session.Id
       Title = session.Title
       Status = session.Status
-      Date = Option.ofNullable session.Date
+      Date = session.Date
       DateAdded = session.DateAdded
-      SpeakerId = session.SpeakerId
-      SpeakerForename = session.SpeakerForename
-      SpeakerSurname = session.SpeakerSurname
-      SpeakerImageUri = session.SpeakerImageUrl
-      AdminId = session.AdminId
-      AdminForename = session.AdminForename
-      AdminSurname = session.AdminSurname
-      AdminImageUri = session.AdminImageUrl
+      Speaker = session.Speaker |> convertToSpeakerSummary
+      Admin = session.Admin |> Option.map convertToAdminSummary
       LastContact = getLastContact(session.ThreadId, lastContacts)
       ThreadId = session.ThreadId }
 
