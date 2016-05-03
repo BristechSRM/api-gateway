@@ -480,6 +480,10 @@
                     "type": "integer",
                     "description": "The speaker's credibility rating (1 to 5)"
                 },
+                "bio": {
+                    "type": "string",
+                    "description": "The speaker's biography"
+                },
                 "handles": {
                     "type": "array",
                     "items": {
