@@ -102,6 +102,10 @@
       <Private>True</Private>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
+    <Reference Include="Owin.Security.AesDataProtectorProvider">
+      <HintPath>..\packages\Owin.Security.AesDataProtectorProvider.1.1.0.0\lib\net45\Owin.Security.AesDataProtectorProvider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Serilog">
       <HintPath>..\packages\Serilog.1.5.14\lib\net45\Serilog.dll</HintPath>
       <Private>True</Private>

@@ -1,10 +1,12 @@
 ﻿module StartupConfig
 
+open Serilog
 open Owin
 open System.Web.Http
 open IdentityServer3.AccessTokenValidation
 open Bristech.Srm.HttpConfig
 open System.Configuration
+open Owin.Security.AesDataProtectorProvider
 
 let authServiceUri = ConfigurationManager.AppSettings.Item("AuthServiceUri")
 
@@ -14,7 +16,11 @@ let configureFilters (config : HttpConfiguration) =
 
 let configureBearerTokenAuth (app : IAppBuilder) =
     app.UseIdentityServerBearerTokenAuthentication
-        (new IdentityServerBearerTokenAuthenticationOptions(Authority = authServiceUri, RequiredScopes = [| "api" |]))
+        (new IdentityServerBearerTokenAuthenticationOptions(Authority = authServiceUri, RequiredScopes = [| "api" |]))    
+
+let configureDataProtection (app : IAppBuilder) =
+    app.UseAesDataProtectorProvider()
+    app
 
 let configureWebApi (app : IAppBuilder) = 
     let config = Default.config |> configureFilters
@@ -23,5 +29,6 @@ let configureWebApi (app : IAppBuilder) =
 let configure (app : IAppBuilder) = 
     app 
     |> configureBearerTokenAuth
+    |> configureDataProtection
     |> configureWebApi
     |> ignore
