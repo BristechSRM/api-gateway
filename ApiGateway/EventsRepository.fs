@@ -21,22 +21,17 @@ let onSameDay (datetime1: DateTime) (datetime2: DateTime) =
     datetime1.Date = datetime2.Date
 
 let convertToEventSession (session: SessionSummaryDto) =
-    let startDate = Option.ofNullable session.Date
-    let endDate =
-        match startDate with
-        | Some date -> Some <| date.AddHours(1.0)
-        | None -> None
     { Id = session.Id
       Title = session.Title
       Description = ""
-      SpeakerId = session.SpeakerId
-      SpeakerForename = session.SpeakerForename
-      SpeakerSurname = session.SpeakerSurname
+      SpeakerId = session.Speaker.Id
+      SpeakerForename = session.Speaker.Forename
+      SpeakerSurname = session.Speaker.Surname
       SpeakerBio = ""
-      SpeakerImageUri = session.SpeakerImageUrl
-      SpeakerRating = session.SpeakerRating
-      StartDate = startDate
-      EndDate = endDate }
+      SpeakerImageUri = session.Speaker.ImageUri
+      SpeakerRating = session.Speaker.Rating
+      StartDate = session.Date
+      EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
 
 let getEvents() = 
     use client = new HttpClient()
@@ -50,7 +45,7 @@ let getEvents() =
             let sessions = JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
             let events =
                 sessions
-                |> Array.filter (fun session -> session.Date.HasValue)
+                |> Array.filter (fun session -> session.Date.IsSome)
                 |> Array.groupBy (fun session -> session.Date.Value)
                 |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = getIds eventSessions})
             Success(events)
@@ -78,7 +73,7 @@ let getEvent(id) =
             Log.Information("Sessions endpoint found")
             let sessions =
                 JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
-                |> Array.filter (fun session -> session.Date.HasValue && onSameDay session.Date.Value date)
+                |> Array.filter (fun session -> session.Date.IsSome && onSameDay session.Date.Value date)
                 |> Array.map convertToEventSession
             let event = { EventDetail.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
             Success(event)

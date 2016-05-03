@@ -1,5 +1,6 @@
 module Program
 
+open Bristech.Srm.HttpConfig
 open Microsoft.Owin.Hosting
 open System.Threading
 open Logging
@@ -19,6 +20,8 @@ open Serilog
 *)
 [<EntryPoint>]
 let main _ =
+
+    JsonSettings.setDefaults()
     setupLogging()
 
     let baseAddress = "http://*:9004"
