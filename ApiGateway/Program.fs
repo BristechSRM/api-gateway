@@ -16,13 +16,11 @@ open System.Threading
     Reference : http://stackoverflow.com/questions/27842979/owin-webapp-start-gives-a-first-chance-exception-of-type-system-reflection-targ 
 *)
 [<EntryPoint>]
-let main _ =
-
+let main _ = 
     JsonSettings.setDefaults()
     setupLogging()
     let baseAddress = "http://*:9004"
-    use server = 
-        WebApp.Start(baseAddress, StartupConfig.configure)
+    use server = WebApp.Start(baseAddress, StartupConfig.configure)
     Log.Information("Listening on {Address}", baseAddress)
     (*
         Because of the way the self hosted server works, it is waiting asynchronously for requests. 
