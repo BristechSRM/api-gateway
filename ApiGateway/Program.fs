@@ -19,7 +19,7 @@ open System.Threading
 let main _ = 
     JsonSettings.setDefaults()
     setupLogging()
-    let baseAddress = "http://*:9004"
+    let baseAddress = "http://*:8080"
     use server = WebApp.Start(baseAddress, StartupConfig.configure)
     Log.Information("Listening on {Address}", baseAddress)
     (*
