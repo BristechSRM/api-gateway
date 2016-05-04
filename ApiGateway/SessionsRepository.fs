@@ -8,8 +8,8 @@ open Serilog
 open Dtos
 open Models
 
-let sessionsUri = "http://api.bris.tech/sessions/"
-let lastContactUri = "http://api.bris.tech:8080/last-contact/"
+let sessionsUri = "http://sessions:8080/sessions/"
+let lastContactUri = "http://comms:8080/last-contact/"
 
 let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
     { Id = dto.Id
