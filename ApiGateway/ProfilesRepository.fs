@@ -8,7 +8,7 @@ open Serilog
 open Dtos
 open Models
 
-let profilesUri = "http://api.bris.tech/profiles/"
+let profilesUri = "http://sessions:8008/profiles/"
 
 let convertToHandle (dto : HandleDto) : Handle =
     { Type = dto.Type

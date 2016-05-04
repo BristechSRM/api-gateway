@@ -8,7 +8,7 @@ open Serilog
 open Dtos
 open Models
 
-let sessionsUri = "http://api.bris.tech/sessions"
+let sessionsUri = "http://sessions:8080/sessions"
 
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
