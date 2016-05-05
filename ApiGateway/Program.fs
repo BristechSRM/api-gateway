@@ -20,7 +20,10 @@ let main _ =
     JsonSettings.setDefaults()
     setupLogging()
     let baseAddress = "http://*:8080"
-    use server = WebApp.Start(baseAddress, StartupConfig.configure)
+    
+    // Temporarily disable auth
+    //use server = WebApp.Start(baseAddress, StartupConfig.configure)
+    use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseAddress)   
     Log.Information("Listening on {Address}", baseAddress)
     (*
         Because of the way the self hosted server works, it is waiting asynchronously for requests. 
