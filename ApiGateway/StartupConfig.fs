@@ -19,7 +19,7 @@ let configureBearerTokenAuth (app : IAppBuilder) =
         (new IdentityServerBearerTokenAuthenticationOptions(Authority = authServiceUri, RequiredScopes = [| "api" |]))    
 
 let configureDataProtection (app : IAppBuilder) =
-    app.UseAesDataProtectorProvider()
+    app.UseAesDataProtectorProvider("key")
     app
 
 let configureWebApi (app : IAppBuilder) = 
