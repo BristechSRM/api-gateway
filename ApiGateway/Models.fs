@@ -95,3 +95,13 @@ type Admin =
       Surname : string
       ImageUri : string
       Handles : Handle[] }
+
+type CorrespondenceItem = 
+    { Id : string
+      SenderId : string
+      ReceiverId : string
+      Date : string
+      Message : string
+      Type : string
+      SenderHandle : string
+      ReceiverHandle : string }
