@@ -45,3 +45,14 @@ type ProfileDto =
       Rating : int
       Bio : string
       Handles : HandleDto[] }
+
+type CorrespondenceItemDto = 
+    { Id : string
+      ExternalId : string
+      SenderId : string
+      ReceiverId : string
+      Date : string
+      Message : string
+      Type : string
+      SenderHandle : string
+      ReceiverHandle : string }
