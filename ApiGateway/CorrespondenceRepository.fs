@@ -30,8 +30,9 @@ let getCorrespondence(senderId : string, receiverId : string) =
         | HttpStatusCode.OK ->
             let correspondenceJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Correspondence endpoint found")
-            let correspondence = JsonConvert.DeserializeObject<CorrespondenceItemDto[]>(correspondenceJson)
-            Success(correspondence |> Seq.map (fun correspondenceItem -> convertToCorrespondenceItem(correspondenceItem)))
+            JsonConvert.DeserializeObject<CorrespondenceItemDto[]>(correspondenceJson)
+            |> Seq.map convertToCorrespondenceItem
+            |> Success
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
