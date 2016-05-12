@@ -24,14 +24,13 @@ type SessionSummaryDto =
       Date : DateTime option
       DateAdded : string
       Speaker : SpeakerSummaryDto
-      Admin : AdminSummaryDto option
-      ThreadId : Guid }
+      Admin : AdminSummaryDto option }
 
 type LastContactDto =
-    { ThreadId : Guid
+    { Id : string
       Date : DateTime
-      SenderId : Guid
-      ReceiverId : Guid }
+      ProfileIdOne : Guid
+      ProfileIdTwo : Guid }
 
 type HandleDto =
     { Type : string

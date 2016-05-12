@@ -46,8 +46,7 @@ type SessionDetail =
       DateAdded : string
       Speaker : SpeakerSummary
       Admin : AdminSummary option
-      LastContact : LastContactSummary option
-      ThreadId : Guid }
+      LastContact : LastContactSummary option }
 
 type EventSession =
     { Id : Guid

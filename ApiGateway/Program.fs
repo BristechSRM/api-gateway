@@ -1,36 +1,37 @@
-open Logging
+module Program
+
 open Microsoft.Owin.Hosting
+open Logging
 open Serilog
+open System
+open System.Configuration
 open System.Threading
 
 (*
-    Note: When running this app from Visual studio / On Windows / Possibly with mono develop (Not checked)
-    Because of its use of the network interfaces, you'll need to run Visual studio as administrator.
-    However the better solution is to do the following:
+    Do not run Visual Studio as Administrator!
 
-    Open a command prompt as administrator and run the following command replacing username with your username
-    netsh http ad urlacl url=http://*:9004/ user=username
-
-    After running this command, you won't need to run visual studio as administrator again.
-
-    Reference : http://stackoverflow.com/questions/27842979/owin-webapp-start-gives-a-first-chance-exception-of-type-system-reflection-targ 
+    Open a command prompt as Administrator and run the following command, replacing username with your username
+    netsh http add urlacl url=http://*:8080/ user=username
 *)
 [<EntryPoint>]
-let main _ = 
+let main _ =
     JsonSettings.setDefaults()
     setupLogging()
-    let baseAddress = "http://*:8080"
-    
-    // Temporarily disable auth
-    //use server = WebApp.Start(baseAddress, StartupConfig.configure)
-    use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseAddress)   
-    Log.Information("Listening on {Address}", baseAddress)
-    (*
-        Because of the way the self hosted server works, it is waiting asynchronously for requests. 
-        It starts running then returns to our code, meaning our program will exit. 
-        This code will wait indefinitely for a signal so that the overall project will continue to run.
-    *)
-    let waitIndefinitelyWithToken = 
-        let cancelSource = new CancellationTokenSource()
-        cancelSource.Token.WaitHandle.WaitOne() |> ignore
-    0
+
+    try
+        let baseUrl = ConfigurationManager.AppSettings.Get("BaseUrl")
+        if String.IsNullOrEmpty baseUrl then
+            failwith "Missing configuration value: 'BaseUrl'"
+
+        use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
+        Log.Information("Listening on {Address}", baseUrl)
+
+        let waitIndefinitelyWithToken = 
+            let cancelSource = new CancellationTokenSource()
+            cancelSource.Token.WaitHandle.WaitOne() |> ignore
+        0
+
+    with
+    | ex ->
+        Log.Fatal("Exception: {0}", ex)
+        -1

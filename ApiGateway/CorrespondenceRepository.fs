@@ -1,6 +1,7 @@
 ﻿module CorrespondenceRepository
 
 open System
+open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
@@ -8,7 +9,12 @@ open Serilog
 open Dtos
 open Models
 
-let correspondenceUri = "http://comms:8080/correspondence"
+let correspondenceUri = 
+    let url = ConfigurationManager.AppSettings.Get("CorrespondenceUrl")
+    if String.IsNullOrEmpty url then
+        failwith "Missing configuration value: 'CorrespondenceUrl'"
+    else
+        url
 
 let convertToCorrespondenceItem (correspondenceItem : CorrespondenceItemDto) : CorrespondenceItem =
     { Id = correspondenceItem.Id

@@ -1,6 +1,7 @@
 ﻿module ProfilesRepository
 
 open System
+open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
@@ -8,7 +9,12 @@ open Serilog
 open Dtos
 open Models
 
-let profilesUri = "http://sessions:8080/profiles/"
+let profilesUri = 
+    let url = ConfigurationManager.AppSettings.Get("ProfilesUrl")
+    if String.IsNullOrEmpty url then
+        failwith "Missing configuration value: 'ProfilesUrl'"
+    else
+        url
 
 let convertToHandle (dto : HandleDto) : Handle =
     { Type = dto.Type
