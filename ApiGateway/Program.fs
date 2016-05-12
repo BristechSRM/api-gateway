@@ -23,7 +23,11 @@ let main _ =
         if String.IsNullOrEmpty baseUrl then
             failwith "Missing configuration value: 'BaseUrl'"
 
+        // Without Auth:
         use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
+
+        // With Auth:
+        //use server = WebApp.Start(baseUrl, StartupConfig.configure)
         Log.Information("Listening on {Address}", baseUrl)
 
         let waitIndefinitelyWithToken = 
