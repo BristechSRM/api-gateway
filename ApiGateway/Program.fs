@@ -38,4 +38,4 @@ let main _ =
     with
     | ex ->
         Log.Fatal("Exception: {0}", ex)
-        -1
+        1
