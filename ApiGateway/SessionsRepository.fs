@@ -1,6 +1,8 @@
 ﻿module SessionsRepository
+
 open Bristech.Srm.HttpConfig
 open System
+open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
@@ -8,8 +10,20 @@ open Serilog
 open Dtos
 open Models
 
-let sessionsUri = "http://sessions:8080/sessions/"
-let lastContactUri = "http://comms:8080/last-contact/"
+let sessionsUri = 
+    let url = ConfigurationManager.AppSettings.Get("SessionsUrl")
+    if String.IsNullOrEmpty url then
+        failwith "Missing configuration value: 'SessionsUrl'"
+    else
+        url
+
+let lastContactUri = 
+    let url = ConfigurationManager.AppSettings.Get("LastContactUrl")
+    if String.IsNullOrEmpty url then
+        failwith "Missing configuration value: 'LastContactUrl'"
+    else
+        url
+
 
 let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
     { Id = dto.Id
@@ -25,32 +39,49 @@ let convertToAdminSummary (dto : AdminSummaryDto) : AdminSummary =
       ImageUri = dto.ImageUri }
 
 let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
-    { Date = dto.Date; SenderId = dto.SenderId; ReceiverId = dto.ReceiverId }
+    { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
-let getLastContact (threadId, lastContacts : LastContactDto[]) =
-    lastContacts
-    |> Seq.tryFind (fun lastContact -> lastContact.ThreadId.Equals threadId)
-    |> Option.map convertToLastContactSummary
+
+let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastContactDto[]) =
+    try
+        lastContacts
+        |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
+        |> Option.map convertToLastContactSummary
+    with
+    | ex ->
+        Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
+        None
 
 let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
+    let spk = session.Speaker |> convertToSpeakerSummary
+    let adm = session.Admin |> Option.map convertToAdminSummary
+    let lc =
+        match adm with 
+        | Some admin -> getLastContact(admin.Id,spk.Id,lastContacts)
+        | None -> None
     { Id = session.Id
       Title = session.Title
       Status = session.Status
       Date = session.Date
-      Speaker = session.Speaker |> convertToSpeakerSummary
-      Admin = session.Admin |> Option.map convertToAdminSummary
-      LastContact = getLastContact(session.ThreadId, lastContacts) }
+      Speaker = spk
+      Admin = adm
+      LastContact = lc }
 
 let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionDetail =
+    let spk = session.Speaker |> convertToSpeakerSummary
+    let adm = session.Admin |> Option.map convertToAdminSummary
+    let lc =
+        match adm with 
+        | Some admin -> getLastContact(admin.Id,spk.Id,lastContacts)
+        | None -> None
     { Id = session.Id
       Title = session.Title
       Status = session.Status
       Date = session.Date
       DateAdded = session.DateAdded
-      Speaker = session.Speaker |> convertToSpeakerSummary
-      Admin = session.Admin |> Option.map convertToAdminSummary
-      LastContact = getLastContact(session.ThreadId, lastContacts)
-      ThreadId = session.ThreadId }
+      Speaker = spk
+      Admin = adm
+      LastContact = lc }
 
 let getLastContacts() =
     use client = new HttpClient()
@@ -60,9 +91,9 @@ let getLastContacts() =
         Log.Information("Last contact endpoint found")
         JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach last contact endpoint")
-            [||]
+    | ex ->
+        Log.Error("getLastContacts() - Exception: {ex}", ex)
+        [||]
 
 let getSessions() = 
     use client = new HttpClient()
@@ -80,12 +111,9 @@ let getSessions() =
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach sessions endpoint")
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
-        | ex ->
-            Log.Information("Unhandled exception: {message}", ex.Message)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
+    | ex ->
+        Log.Error("getSessions() - Exception: {ex}", ex)
+        Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
 
 let getSession(id : Guid) =
     use client = new HttpClient()
@@ -103,9 +131,6 @@ let getSession(id : Guid) =
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach session endpoint")
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
-        | ex ->
-            Log.Information("Unhandled exception: {message}", ex.Message)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
+    | ex ->
+        Log.Error("Exception: {ex}", ex)
+        Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }

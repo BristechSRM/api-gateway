@@ -1,6 +1,7 @@
 ﻿module EventsRepository
 
 open System
+open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
@@ -8,7 +9,12 @@ open Serilog
 open Dtos
 open Models
 
-let sessionsUri = "http://sessions:8080/sessions"
+let sessionsUri = 
+    let url = ConfigurationManager.AppSettings.Get("SessionsUrl")
+    if String.IsNullOrEmpty url then
+        failwith "Missing configuration value: 'SessionsUrl'"
+    else
+        url
 
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")

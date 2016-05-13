@@ -197,82 +197,6 @@
                     }
                 }
             }
-        },
-        "/threads": {
-            "post": {
-                "tags": [
-                    "api-gateway"
-                ],
-                "summary": "Adds a communication thread",
-                "description": "Creates a communication thread",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "Correspondence items",
-                        "description": "The communication correspondence items",
-                        "required": true,
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/CorrespondenceItem"
-                            }
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Communication thread successfully created",
-                        "schema": {
-                            "$ref": "#/definitions/ThreadCreated"
-                        }
-                    },
-                    "422": {
-                        "description": "Communication thread validation error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal server error",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
-            }
-        },
-        "/threads/{threadId}": {
-            "get": {
-                "tags": [
-                    "api-gateway"
-                ],
-                "summary": "Returns details of the specified communication thread",
-                "description": "Returns all correspondence within a communication thread",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "threadId",
-                        "description": "The communication thread identifier",
-                        "required": true,
-                        "type": "string",
-                        "format": "guid"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Communication thread found",
-                        "schema": {
-                            "$ref": "#/definitions/ThreadDetail"
-                        }
-                    },
-                    "404": {
-                        "description": "Communication thread not found",
-                        "schema": {
-                            "$ref": "#/definitions/Error"
-                        }
-                    }
-                }
-            }
         }
     },
     "definitions": {
@@ -375,11 +299,6 @@
                     "type": "object",
                     "$ref": "#/definitions/LastContactSummary",
                     "description": "The details of the last contact with the speaker"
-                },
-                "threadId": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique identifier of any session conversation thread"
                 }
             }
         },
@@ -699,38 +618,6 @@
                 },
                 "message": {
                     "type": "string"
-                }
-            }
-        },
-        "ThreadDetail": {
-            "type": "object",
-            "required": [
-                "id",
-                "items"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "guid",
-                    "description": "The unique communication thread identifier"
-                },
-                "items": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/CorrespondenceItem"
-                    }
-                }
-            }
-        },
-        "ThreadCreated": {
-            "type": "object",
-            "required": [
-                "id"
-            ],
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "description": "The unique identifier"
                 }
             }
         },

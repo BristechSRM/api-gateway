@@ -8,7 +8,7 @@ open Bristech.Srm.HttpConfig
 open System.Configuration
 open Owin.Security.AesDataProtectorProvider
 
-let authServiceUri = ConfigurationManager.AppSettings.Item("AuthServiceUri")
+let authServiceUri = ConfigurationManager.AppSettings.Item("AuthServiceUrl")
 
 let configureFilters (config : HttpConfiguration) = 
     config.Filters.Add(new AuthorizeAttribute())
