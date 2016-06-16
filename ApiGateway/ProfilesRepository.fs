@@ -62,15 +62,12 @@ let getProfile(pid : Guid) =
             let profile = JsonConvert.DeserializeObject<ProfileDto>(sessionJson)
             Success(profile)
         | _ ->
-            Log.Information("Error Fetching profile: Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
+            Log.Error("Error Fetching profile: Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach profile endpoint")
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach profile endpoint" }
         | ex ->
-            Log.Information("Unhandled exception: {message}", ex.Message)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
+            Log.Error("Unhandled exception: {message}", ex)
+            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
 let updateProfile (pid : Guid) (profile : ProfileDto) = 
     use client = new HttpClient()
@@ -78,21 +75,17 @@ let updateProfile (pid : Guid) (profile : ProfileDto) =
     try
         let data = JsonConvert.SerializeObject(profile)
         let content = new StringContent(data,Encoding.UTF8,"application/json")
-        Log.Information("Sending update profile request to profiles endpoint")
         let result = client.PutAsync(profilesUri + pid.ToString(),content).Result
+
         match result.StatusCode with
-        | HttpStatusCode.OK -> 
-            getProfile pid
+        | HttpStatusCode.OK -> getProfile pid
         | _ -> 
             Log.Information("Error updating profile Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach profile endpoint")
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach profile endpoint" }
         | ex ->
-            Log.Information("Unhandled exception: {message}", ex.Message)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
+            Log.Error("Unhandled exception: {message}", ex)
+            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
 let getAdmin aid =
     match getProfile aid with
