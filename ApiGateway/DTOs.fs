@@ -43,7 +43,7 @@ type ProfileDto =
       ImageUrl : string
       Rating : int
       Bio : string
-      Handles : HandleDto[] }
+      Handles : HandleDto seq }
 
 type CorrespondenceItemDto = 
     { Id : string
