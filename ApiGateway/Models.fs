@@ -3,7 +3,8 @@
 open System
 open System.Net
 
-type ErrorResponse =
+//TODO rename for consistency. 
+type ServerError =
     { HttpStatusCode : HttpStatusCode
       Body : string }
 
@@ -11,6 +12,7 @@ type Result<'Success, 'Failure> =
     | Success of 'Success
     | Failure of 'Failure
 
+[<CLIMutable>]
 type SpeakerSummary =
     { Id : Guid
       Forename : string
@@ -18,17 +20,20 @@ type SpeakerSummary =
       Rating : int
       ImageUri : string }
 
+[<CLIMutable>]
 type AdminSummary =
     { Id : Guid
       Forename : string
       Surname : string
       ImageUri : string }
 
+[<CLIMutable>]
 type LastContactSummary =
     { Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }
 
+[<CLIMutable>]
 type SessionSummary =
     { Id : Guid
       Title : string
@@ -38,6 +43,7 @@ type SessionSummary =
       Admin : AdminSummary option
       LastContact : LastContactSummary option }
 
+[<CLIMutable>]
 type SessionDetail =
     { Id : Guid
       Title : string
@@ -48,6 +54,7 @@ type SessionDetail =
       Admin : AdminSummary option
       LastContact : LastContactSummary option }
 
+[<CLIMutable>]
 type EventSession =
     { Id : Guid
       Title : string
@@ -61,6 +68,7 @@ type EventSession =
       StartDate : DateTime option
       EndDate : DateTime option }
 
+[<CLIMutable>]
 type EventSummary =
     { Id : string
       Date : DateTime
@@ -68,6 +76,7 @@ type EventSummary =
       Location : string
       Sessions : Guid[] }
 
+[<CLIMutable>]
 type EventDetail =
     { Id : string
       Date : DateTime
@@ -75,10 +84,12 @@ type EventDetail =
       Location : string
       Sessions : EventSession[] }
 
+[<CLIMutable>]
 type Handle =
     { Type : string
       Identifier : string }
 
+[<CLIMutable>]
 type Speaker =
     { Id : Guid
       Forename : string
@@ -86,15 +97,17 @@ type Speaker =
       Rating : int
       ImageUri : string
       Bio : string
-      Handles : Handle[] }
+      Handles : Handle seq }
 
+[<CLIMutable>]
 type Admin =
     { Id : Guid
       Forename : string
       Surname : string
       ImageUri : string
-      Handles : Handle[] }
+      Handles : Handle seq }
 
+[<CLIMutable>]
 type CorrespondenceItem = 
     { Id : string
       SenderId : string

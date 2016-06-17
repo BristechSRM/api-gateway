@@ -1,6 +1,7 @@
 ﻿module ProfilesRepository
 
 open System
+open System.Text
 open System.Configuration
 open System.Net
 open System.Net.Http
@@ -16,31 +17,44 @@ let profilesUri =
     else
         url
 
-let convertToHandle (dto : HandleDto) : Handle =
+let handleDtoToHandle (dto : HandleDto) : Handle =
     { Type = dto.Type
       Identifier = dto.Identifier }
 
-let convertToAdmin (profile : ProfileDto) : Admin =
+let handleToHandleDto (handle : Handle) : HandleDto = 
+    { Type = handle.Type
+      Identifier = handle.Identifier }
+
+let profileToAdmin (profile : ProfileDto) : Admin =
     { Id = profile.Id
       Forename = profile.Forename
       Surname = profile.Surname
       ImageUri = profile.ImageUrl
-      Handles = profile.Handles |> Array.map convertToHandle }
+      Handles = profile.Handles |> Seq.map handleDtoToHandle }
 
-let convertToSpeaker (profile : ProfileDto) : Speaker =
+let profileToSpeaker (profile : ProfileDto) : Speaker =
     { Id = profile.Id
       Forename = profile.Forename
       Surname = profile.Surname
       Rating = profile.Rating
       ImageUri = profile.ImageUrl
-      Bio = ""
-      Handles = profile.Handles |> Array.map convertToHandle }
+      Bio = profile.Bio
+      Handles = profile.Handles |> Seq.map handleDtoToHandle }
 
-let getProfile(id : Guid) =
+let speakerToProfile (speaker : Speaker) : ProfileDto = 
+    { Id = speaker.Id 
+      Forename = speaker.Forename
+      Surname = speaker.Surname
+      Rating = speaker.Rating
+      ImageUrl = speaker.ImageUri
+      Bio = speaker.Bio
+      Handles = speaker.Handles |> Seq.map handleToHandleDto }
+
+let getProfile(pid : Guid) =
     use client = new HttpClient()
     
     try
-        let result = client.GetAsync(profilesUri + id.ToString()).Result
+        let result = client.GetAsync(profilesUri + pid.ToString()).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
@@ -48,22 +62,48 @@ let getProfile(id : Guid) =
             let profile = JsonConvert.DeserializeObject<ProfileDto>(sessionJson)
             Success(profile)
         | _ ->
-            Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
+            Log.Error("Error Fetching profile: Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | :? AggregateException ->
-            Log.Information("Could not reach session endpoint")
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "Could not reach sessions endpoint" }
         | ex ->
-            Log.Information("Unhandled exception: {message}", ex.Message)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred: " + ex.Message }
+            Log.Error("Unhandled exception: {message}", ex)
+            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
-let getAdmin id =
-    match getProfile id with
-    | Success profile -> convertToAdmin profile |> Success
+let updateProfile (pid : Guid) (profile : ProfileDto) = 
+    use client = new HttpClient()
+
+    try
+        let data = JsonConvert.SerializeObject(profile)
+        let content = new StringContent(data,Encoding.UTF8,"application/json")
+        let result = client.PutAsync(profilesUri + pid.ToString(),content).Result
+
+        match result.StatusCode with
+        | HttpStatusCode.OK -> getProfile pid
+        | _ -> 
+            Log.Information("Error updating profile Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
+            Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
+    with
+        | ex ->
+            Log.Error("Unhandled exception: {message}", ex)
+            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+
+let getAdmin aid =
+    match getProfile aid with
+    | Success profile -> profileToAdmin profile |> Success
     | Failure error -> Failure error
 
-let getSpeaker id =
-    match getProfile id with
-    | Success profile -> convertToSpeaker profile |> Success
+let getSpeaker sid =
+    match getProfile sid with
+    | Success profile -> profileToSpeaker profile |> Success
     | Failure error -> Failure error
+
+
+let updateSpeaker sid (speaker : Speaker) = 
+    if sid <> speaker.Id then
+        Failure { HttpStatusCode = HttpStatusCode.BadRequest 
+                  Body = "Invalid Data. specified speaker Id in request url does not match Id of input speaker"}
+    else 
+        let profile = speakerToProfile speaker
+        match updateProfile sid profile with
+        | Success profile -> profileToSpeaker profile |> Success
+        | Failure error -> Failure error
