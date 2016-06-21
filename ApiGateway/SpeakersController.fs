@@ -26,3 +26,13 @@ type SpeakersController() =
         | Failure error -> 
             Log.Error("Put failed with StatusCode: {code} and message {body}",error.HttpStatusCode, error.Body)
             x.Request.CreateErrorResponse(error.HttpStatusCode, error.Body)
+
+    member x.Patch(id: Guid, operations : RawPatchOperation list option) =  
+        Log.Information("Received Patch request for profile with id: {id}",id)
+        match patchSpeaker id operations with
+        | Success speaker -> 
+            Log.Information("Success: Patch request for speaker with id: {id}", id)
+            x.Request.CreateResponse(speaker)
+        | Failure error -> 
+            Log.Error("Patch request failed with code: {code} and message: {message}", error.HttpStatusCode, error.Body)
+            x.Request.CreateErrorResponse(error.HttpStatusCode,error.Body)
