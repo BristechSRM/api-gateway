@@ -80,7 +80,25 @@ let updateProfile (pid : Guid) (profile : ProfileDto) =
         match result.StatusCode with
         | HttpStatusCode.OK -> getProfile pid
         | _ -> 
-            Log.Information("Error updating profile Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
+            Log.Information("Error updating profile. Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
+            Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
+    with
+        | ex ->
+            Log.Error("Unhandled exception: {message}", ex)
+            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+
+let patchProfile (pid: Guid) (operations: RawPatchOperation list option) = 
+    use client = new HttpClient()
+    try
+        let data = JsonConvert.SerializeObject(operations)
+        use content = new StringContent(data,Encoding.UTF8,"application/json")
+        use message = new HttpRequestMessage(new HttpMethod("PATCH"),profilesUri + pid.ToString(),Content=content)
+        let result = client.SendAsync(message).Result
+
+        match result.StatusCode with
+        | HttpStatusCode.OK -> getProfile pid
+        | _ -> 
+            Log.Information("Error patching profile. Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
         | ex ->
@@ -107,3 +125,8 @@ let updateSpeaker sid (speaker : Speaker) =
         match updateProfile sid profile with
         | Success profile -> profileToSpeaker profile |> Success
         | Failure error -> Failure error
+
+let patchSpeaker (sid: Guid) (operations: RawPatchOperation list option) = 
+    match patchProfile sid operations with
+    | Success profile -> profileToSpeaker profile |> Success
+    | Failure error -> Failure error
