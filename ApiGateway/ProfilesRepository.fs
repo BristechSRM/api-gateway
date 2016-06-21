@@ -65,9 +65,9 @@ let getProfile(pid : Guid) =
             Log.Error("Error Fetching profile: Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | ex ->
-            Log.Error("Unhandled exception: {message}", ex)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+    | ex ->
+        Log.Error("Unhandled exception: {message}", ex)
+        Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
 let updateProfile (pid : Guid) (profile : ProfileDto) = 
     use client = new HttpClient()
@@ -83,9 +83,9 @@ let updateProfile (pid : Guid) (profile : ProfileDto) =
             Log.Information("Error updating profile. Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | ex ->
-            Log.Error("Unhandled exception: {message}", ex)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+    | ex ->
+        Log.Error("Unhandled exception: {message}", ex)
+        Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
 let patchProfile (pid: Guid) (operations: RawPatchOperation list option) = 
     use client = new HttpClient()
@@ -101,9 +101,9 @@ let patchProfile (pid: Guid) (operations: RawPatchOperation list option) =
             Log.Information("Error patching profile. Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
     with
-        | ex ->
-            Log.Error("Unhandled exception: {message}", ex)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+    | ex ->
+        Log.Error("Unhandled exception: {message}", ex)
+        Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
 let getAdmin aid =
     match getProfile aid with
