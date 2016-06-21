@@ -115,7 +115,6 @@ let getSpeaker sid =
     | Success profile -> profileToSpeaker profile |> Success
     | Failure error -> Failure error
 
-
 let updateSpeaker sid (speaker : Speaker) = 
     if sid <> speaker.Id then
         Failure { HttpStatusCode = HttpStatusCode.BadRequest 
