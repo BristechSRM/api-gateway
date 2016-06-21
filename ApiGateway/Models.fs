@@ -3,7 +3,7 @@
 open System
 open System.Net
 
-//TODO rename for consistency. 
+//TODO rename fields for consistency with other services. 
 type ServerError =
     { HttpStatusCode : HttpStatusCode
       Body : string }
@@ -11,6 +11,12 @@ type ServerError =
 type Result<'Success, 'Failure> =
     | Success of 'Success
     | Failure of 'Failure
+
+type RawPatchOperation = 
+    { Op : string
+      Path : string
+      Value : string
+      From : string }
 
 [<CLIMutable>]
 type SpeakerSummary =
