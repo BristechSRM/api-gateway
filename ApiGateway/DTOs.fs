@@ -36,14 +36,14 @@ type HandleDto =
     { Type : string
       Identifier : string }
 
-type ProfileDto =
+type Profile =
     { Id : Guid
       Forename : string
       Surname : string
       ImageUrl : string
       Rating : int
-      Bio : string
-      Handles : HandleDto seq }
+      Bio : string }
+      //Handles : HandleDto seq }
 
 type CorrespondenceItemDto = 
     { Id : string

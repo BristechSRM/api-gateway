@@ -30,12 +30,14 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="JsonSettings.fs" />
     <Compile Include="Logging.fs" />
-    <Compile Include="DTOs.fs" />
+    <Compile Include="Dtos.fs" />
     <Compile Include="Models.fs" />
+    <Compile Include="DataTransform.fs" />
     <Compile Include="EventsRepository.fs" />
     <Compile Include="ProfilesRepository.fs" />
     <Compile Include="SessionsRepository.fs" />
     <Compile Include="CorrespondenceRepository.fs" />
+    <Compile Include="Catch.fs" />
     <Compile Include="DocsController.fs" />
     <Compile Include="CorrespondenceController.fs" />
     <Compile Include="AdminsController.fs" />

@@ -7,15 +7,14 @@ open Serilog
 open ProfilesRepository
 open System
 open Models
+open DataTransform
 
 type SpeakersController() =
     inherit ApiController()
 
+    //TODO handles
     member x.Get(id : Guid) =
-        Log.Information("Received GET request for a speaker with id: {id}", id)
-        match getSpeaker id with
-        | Success speaker -> x.Request.CreateResponse(speaker)
-        | Failure error -> x.Request.CreateResponse(error.HttpStatusCode, error.Body)
+        Catch.respond x HttpStatusCode.OK (fun () -> getProfile id |> Profile.toSpeaker [])
 
     member x.Put(id : Guid, updatedSpeaker : Speaker) = 
         Log.Information("Received Put request for speaker with id: {id}", id)
