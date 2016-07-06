@@ -13,7 +13,6 @@ open DataTransform
 type SpeakersController() =
     inherit ApiController()
 
-    //TODO handles
     member x.Get(id : Guid) =
         (fun () -> 
             let profile = getProfile id 
