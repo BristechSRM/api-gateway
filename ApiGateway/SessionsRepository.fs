@@ -9,6 +9,7 @@ open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
+open LastContactRepository
 
 let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
     { Id = dto.Id
@@ -23,11 +24,11 @@ let convertToAdminSummary (dto : AdminSummaryDto) : AdminSummary =
       Surname = dto.Surname
       ImageUri = dto.ImageUri }
 
-let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
+let convertToLastContactSummary (dto : LastContact) : LastContactSummary =
     { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
 
-let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastContactDto[]) =
+let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastContact[]) =
     try
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
@@ -37,7 +38,7 @@ let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastConta
         Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
         None
 
-let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
+let convertToSessionSummary (lastContacts : LastContact[], session : SessionDto) : SessionSummary =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -52,7 +53,7 @@ let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionS
       Admin = adm
       LastContact = lc }
 
-let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionDetail =
+let convertToSessionDetail (lastContacts : LastContact[], session : SessionDto) : SessionDetail =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -74,13 +75,13 @@ let getLastContacts() =
     try
         let lastContactJson = client.GetAsync(lastContactUrl).Result.Content.ReadAsStringAsync().Result
         Log.Information("Last contact endpoint found")
-        JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
+        JsonConvert.DeserializeObject<LastContact[]>(lastContactJson)
     with
     | ex ->
         Log.Error("getLastContacts() - Exception: {ex}", ex)
         [||]
 
-let getSessions() = 
+let getSessions() =  
     use client = new HttpClient()
 
     try
@@ -89,7 +90,7 @@ let getSessions() =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Sessions endpoint found")
-            let sessions = JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
+            let sessions = JsonConvert.DeserializeObject<SessionDto[]>(sessionJson)
             let lastContacts = getLastContacts()
             Success(sessions |> Seq.map (fun session -> convertToSessionSummary(lastContacts, session)))
         | _ ->
@@ -109,7 +110,7 @@ let getSession(id : Guid) =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Session endpoint found")
-            let session = JsonConvert.DeserializeObject<SessionSummaryDto>(sessionJson)
+            let session = JsonConvert.DeserializeObject<SessionDto>(sessionJson)
             let lastContacts = getLastContacts()
             Success(convertToSessionDetail(lastContacts, session))
         | _ ->

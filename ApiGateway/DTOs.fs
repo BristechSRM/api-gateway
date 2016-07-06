@@ -16,7 +16,7 @@ type AdminSummaryDto =
       Surname : string
       ImageUri : string }
 
-type SessionSummaryDto =
+type SessionDto =
     { Id : Guid
       Title : string
       Description : string
@@ -26,7 +26,7 @@ type SessionSummaryDto =
       Speaker : SpeakerSummaryDto
       Admin : AdminSummaryDto option }
 
-type LastContactDto =
+type LastContact =
     { Id : string
       Date : DateTime
       ProfileIdOne : Guid
@@ -43,7 +43,6 @@ type Profile =
       ImageUrl : string
       Rating : int
       Bio : string }
-      //Handles : HandleDto seq }
 
 type CorrespondenceItemDto = 
     { Id : string
