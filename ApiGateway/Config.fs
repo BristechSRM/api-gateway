@@ -14,6 +14,3 @@ let handlesUrl = getConfigValue "HandlesUrl"
 let sessionsUrl = getConfigValue "SessionsUrl"
 let profilesUrl = getConfigValue "ProfilesUrl"
 let lastContactUrl = getConfigValue "LastContactUrl"
-
-
-

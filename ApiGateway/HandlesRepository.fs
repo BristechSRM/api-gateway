@@ -1,13 +1,12 @@
 ﻿module HandlesRepository
 
+open Config
 open Newtonsoft.Json
 open System
 open System.Net.Http
 open System.Net
 open Serilog
 open Dtos
-
-let handlesUrl = Config.handlesUrl 
 
 let getHandlesByProfileId (pid : Guid) = 
     use client = new HttpClient()
