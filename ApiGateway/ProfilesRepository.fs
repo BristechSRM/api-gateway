@@ -1,8 +1,8 @@
 ﻿module ProfilesRepository
 
+open Config
 open System
 open System.Text
-open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
@@ -10,13 +10,6 @@ open Serilog
 open Dtos
 open Models
 open DataTransform
-
-let profilesUri = 
-    let url = ConfigurationManager.AppSettings.Get("ProfilesUrl")
-    if String.IsNullOrEmpty url then
-        failwith "Missing configuration value: 'ProfilesUrl'"
-    else
-        url
 
 let speakerToProfile (speaker : Speaker) : Profile = 
     { Id = speaker.Id 
@@ -30,7 +23,7 @@ let speakerToProfile (speaker : Speaker) : Profile =
 let getProfile(pid : Guid) =
     use client = new HttpClient()
     
-    let result = client.GetAsync(profilesUri + pid.ToString()).Result
+    let result = client.GetAsync(profilesUrl + pid.ToString()).Result
     match result.StatusCode with
     | HttpStatusCode.OK ->
         let profileJson = result.Content.ReadAsStringAsync().Result
@@ -49,7 +42,7 @@ let updateProfile (pid : Guid) (profile : Profile) =
     try
         let data = JsonConvert.SerializeObject(profile)
         let content = new StringContent(data,Encoding.UTF8,"application/json")
-        let result = client.PutAsync(profilesUri + pid.ToString(),content).Result
+        let result = client.PutAsync(profilesUrl + pid.ToString(),content).Result
 
         match result.StatusCode with
         | HttpStatusCode.OK -> Success <| getProfile pid

@@ -1,20 +1,13 @@
 ﻿module EventsRepository
 
+open Config
 open System
-open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
-
-let sessionsUri = 
-    let url = ConfigurationManager.AppSettings.Get("SessionsUrl")
-    if String.IsNullOrEmpty url then
-        failwith "Missing configuration value: 'SessionsUrl'"
-    else
-        url
 
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
@@ -43,7 +36,7 @@ let getEvents() =
     use client = new HttpClient()
 
     try
-        let result = client.GetAsync(sessionsUri).Result
+        let result = client.GetAsync(sessionsUrl).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
@@ -72,7 +65,7 @@ let getEvent(id) =
 
     try
         let date = DateTime.Parse(id, null, System.Globalization.DateTimeStyles.RoundtripKind)
-        let result = client.GetAsync(sessionsUri).Result
+        let result = client.GetAsync(sessionsUrl).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
