@@ -69,18 +69,6 @@ let convertToSessionDetail (lastContacts : LastContact[], session : SessionDto) 
       Admin = adm
       LastContact = lc }
 
-let getLastContacts() =
-    use client = new HttpClient()
-
-    try
-        let lastContactJson = client.GetAsync(lastContactUrl).Result.Content.ReadAsStringAsync().Result
-        Log.Information("Last contact endpoint found")
-        JsonConvert.DeserializeObject<LastContact[]>(lastContactJson)
-    with
-    | ex ->
-        Log.Error("getLastContacts() - Exception: {ex}", ex)
-        [||]
-
 let getSessions() =  
     use client = new HttpClient()
 
