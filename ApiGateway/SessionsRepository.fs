@@ -9,25 +9,26 @@ open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
+open LastContactRepository
 
-let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
+let convertToSpeakerSummary (dto : Dtos.SpeakerSummary) : Models.SpeakerSummary =
     { Id = dto.Id
       Forename = dto.Forename
       Surname = dto.Surname
       Rating = dto.Rating
       ImageUri = dto.ImageUri }
 
-let convertToAdminSummary (dto : AdminSummaryDto) : AdminSummary =
+let convertToAdminSummary (dto : Dtos.AdminSummary) : Models.AdminSummary =
     { Id = dto.Id
       Forename = dto.Forename
       Surname = dto.Surname
       ImageUri = dto.ImageUri }
 
-let convertToLastContactSummary (dto : LastContactDto) : LastContactSummary =
+let convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
     { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
 
-let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastContactDto[]) =
+let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : Dtos.LastContact[]) =
     try
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
@@ -37,7 +38,7 @@ let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastConta
         Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
         None
 
-let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionSummary =
+let convertToSessionSummary (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.SessionSummary =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -52,7 +53,7 @@ let convertToSessionSummary (lastContacts : LastContactDto[], session : SessionS
       Admin = adm
       LastContact = lc }
 
-let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSummaryDto) : SessionDetail =
+let convertToSessionDetail (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.SessionDetail =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -68,19 +69,7 @@ let convertToSessionDetail (lastContacts : LastContactDto[], session : SessionSu
       Admin = adm
       LastContact = lc }
 
-let getLastContacts() =
-    use client = new HttpClient()
-
-    try
-        let lastContactJson = client.GetAsync(lastContactUrl).Result.Content.ReadAsStringAsync().Result
-        Log.Information("Last contact endpoint found")
-        JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
-    with
-    | ex ->
-        Log.Error("getLastContacts() - Exception: {ex}", ex)
-        [||]
-
-let getSessions() = 
+let getSessions() =  
     use client = new HttpClient()
 
     try
@@ -89,7 +78,7 @@ let getSessions() =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Sessions endpoint found")
-            let sessions = JsonConvert.DeserializeObject<SessionSummaryDto[]>(sessionJson)
+            let sessions = JsonConvert.DeserializeObject<Session[]>(sessionJson)
             let lastContacts = getLastContacts()
             Success(sessions |> Seq.map (fun session -> convertToSessionSummary(lastContacts, session)))
         | _ ->
@@ -109,7 +98,7 @@ let getSession(id : Guid) =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Session endpoint found")
-            let session = JsonConvert.DeserializeObject<SessionSummaryDto>(sessionJson)
+            let session = JsonConvert.DeserializeObject<Session>(sessionJson)
             let lastContacts = getLastContacts()
             Success(convertToSessionDetail(lastContacts, session))
         | _ ->

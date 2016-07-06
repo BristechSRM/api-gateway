@@ -16,7 +16,7 @@ let correspondenceUri =
     else
         url
 
-let convertToCorrespondenceItem (correspondenceItem : CorrespondenceItemDto) : CorrespondenceItem =
+let convertToCorrespondenceItem (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
     { Id = correspondenceItem.Id
       SenderId = correspondenceItem.SenderId
       ReceiverId = correspondenceItem.ReceiverId
@@ -36,7 +36,7 @@ let getCorrespondence(senderId : string, receiverId : string) =
         | HttpStatusCode.OK ->
             let correspondenceJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Correspondence endpoint found")
-            JsonConvert.DeserializeObject<CorrespondenceItemDto[]>(correspondenceJson)
+            JsonConvert.DeserializeObject<Dtos.CorrespondenceItem[]>(correspondenceJson)
             |> Seq.map convertToCorrespondenceItem
             |> Success
         | _ ->
