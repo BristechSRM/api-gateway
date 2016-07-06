@@ -1,24 +1,28 @@
 ﻿module DataTransform
 
 module Handle = 
-    let handleDtoToHandle (dto : Dtos.HandleDto) : Models.Handle =
+    let toHandle (dto : Dtos.Handle) : Models.Handle =
         { Type = dto.Type
           Identifier = dto.Identifier }
 
+    let toHandleDto (handle : Models.Handle) : Dtos.Handle = 
+        { Type = handle.Type
+          Identifier = handle.Identifier }
+
 module Profile = 
 
-    let toAdmin (handles : Dtos.HandleDto seq) (profile : Dtos.Profile): Models.Admin =
+    let toAdmin (handles : Dtos.Handle seq) (profile : Dtos.Profile): Models.Admin =
         { Id = profile.Id
           Forename = profile.Forename
           Surname = profile.Surname
           ImageUri = profile.ImageUrl
-          Handles = handles |> Seq.map Handle.handleDtoToHandle }
+          Handles = handles |> Seq.map Handle.toHandle }
 
-    let toSpeaker (handles : Dtos.HandleDto seq) (profile : Dtos.Profile) : Models.Speaker =
+    let toSpeaker (handles : Dtos.Handle seq) (profile : Dtos.Profile) : Models.Speaker =
         { Id = profile.Id
           Forename = profile.Forename
           Surname = profile.Surname
           Rating = profile.Rating
           ImageUri = profile.ImageUrl
           Bio = profile.Bio
-          Handles = handles |> Seq.map Handle.handleDtoToHandle }
+          Handles = handles |> Seq.map Handle.toHandle }
