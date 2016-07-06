@@ -16,7 +16,7 @@ type SessionsController() =
         (fun () -> 
             let sessions = getSessions()
             let lastContacts = getLastContacts()
-            sessions |> Seq.map (fun session -> Session.toModel(lastContacts, session))) 
+            sessions |> Seq.map (fun session -> Session.toModel lastContacts session)) 
         |> Catch.respond x HttpStatusCode.OK 
 
 
@@ -24,5 +24,5 @@ type SessionsController() =
         (fun () -> 
             let session = getSession id
             let lastContacts = getLastContacts()
-            Session.toModel(lastContacts, session)) 
+            Session.toModel lastContacts session) 
         |> Catch.respond x HttpStatusCode.OK

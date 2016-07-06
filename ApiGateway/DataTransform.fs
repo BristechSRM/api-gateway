@@ -48,17 +48,17 @@ module Session =
         { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
 
-    let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : Dtos.LastContact[]) =
+    let getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
         |> Option.map convertToLastContactSummary
 
-    let toModel (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.Session =
+    let toModel (lastContacts : Dtos.LastContact[]) (session : Dtos.Session) : Models.Session =
         let spk = session.Speaker |> convertToSpeakerSummary
         let adm = session.Admin |> Option.map convertToAdminSummary
         let lc =
             match adm with 
-            | Some admin -> getLastContact(admin.Id,spk.Id,lastContacts)
+            | Some admin -> getLastContact admin.Id spk.Id lastContacts
             | None -> None
         { Id = session.Id
           Title = session.Title
