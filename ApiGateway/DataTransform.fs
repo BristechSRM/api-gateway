@@ -49,14 +49,9 @@ module Session =
 
 
     let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : Dtos.LastContact[]) =
-        try
-            lastContacts
-            |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
-            |> Option.map convertToLastContactSummary
-        with
-        | ex ->
-            Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
-            None
+        lastContacts
+        |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
+        |> Option.map convertToLastContactSummary
 
     let toModel (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.Session =
         let spk = session.Speaker |> convertToSpeakerSummary
