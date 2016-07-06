@@ -9,6 +9,7 @@ open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
+open DataTransform
 
 let profilesUri = 
     let url = ConfigurationManager.AppSettings.Get("ProfilesUrl")
@@ -17,59 +18,36 @@ let profilesUri =
     else
         url
 
-let handleDtoToHandle (dto : HandleDto) : Handle =
-    { Type = dto.Type
-      Identifier = dto.Identifier }
-
-let handleToHandleDto (handle : Handle) : HandleDto = 
+let handleToHandleDto (handle : Models.Handle) : Dtos.HandleDto = 
     { Type = handle.Type
       Identifier = handle.Identifier }
 
-let profileToAdmin (profile : ProfileDto) : Admin =
-    { Id = profile.Id
-      Forename = profile.Forename
-      Surname = profile.Surname
-      ImageUri = profile.ImageUrl
-      Handles = profile.Handles |> Seq.map handleDtoToHandle }
-
-let profileToSpeaker (profile : ProfileDto) : Speaker =
-    { Id = profile.Id
-      Forename = profile.Forename
-      Surname = profile.Surname
-      Rating = profile.Rating
-      ImageUri = profile.ImageUrl
-      Bio = profile.Bio
-      Handles = profile.Handles |> Seq.map handleDtoToHandle }
-
-let speakerToProfile (speaker : Speaker) : ProfileDto = 
+let speakerToProfile (speaker : Speaker) : Profile = 
     { Id = speaker.Id 
       Forename = speaker.Forename
       Surname = speaker.Surname
       Rating = speaker.Rating
       ImageUrl = speaker.ImageUri
-      Bio = speaker.Bio
-      Handles = speaker.Handles |> Seq.map handleToHandleDto }
+      Bio = speaker.Bio }
+      //Handles = speaker.Handles |> Seq.map handleToHandleDto }
 
 let getProfile(pid : Guid) =
     use client = new HttpClient()
     
-    try
-        let result = client.GetAsync(profilesUri + pid.ToString()).Result
-        match result.StatusCode with
-        | HttpStatusCode.OK ->
-            let sessionJson = result.Content.ReadAsStringAsync().Result
-            Log.Information("Profiles endpoint found")
-            let profile = JsonConvert.DeserializeObject<ProfileDto>(sessionJson)
-            Success(profile)
-        | _ ->
-            Log.Error("Error Fetching profile: Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
-            Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
-    with
-        | ex ->
-            Log.Error("Unhandled exception: {message}", ex)
-            Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
+    let result = client.GetAsync(profilesUri + pid.ToString()).Result
+    match result.StatusCode with
+    | HttpStatusCode.OK ->
+        let sessionJson = result.Content.ReadAsStringAsync().Result
+        Log.Information("Profiles endpoint found")
+        let profile = JsonConvert.DeserializeObject<Profile>(sessionJson)
+        profile
+    | _ ->
+        let message = sprintf "Error Fetching profile: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
+        Log.Error(message)
+        raise <| Exception(message)
 
-let updateProfile (pid : Guid) (profile : ProfileDto) = 
+//Currently broken. Handles aren't dealt with since sessions change. 
+let updateProfile (pid : Guid) (profile : Profile) = 
     use client = new HttpClient()
 
     try
@@ -78,7 +56,7 @@ let updateProfile (pid : Guid) (profile : ProfileDto) =
         let result = client.PutAsync(profilesUri + pid.ToString(),content).Result
 
         match result.StatusCode with
-        | HttpStatusCode.OK -> getProfile pid
+        | HttpStatusCode.OK -> Success <| getProfile pid
         | _ -> 
             Log.Information("Error updating profile Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
@@ -87,17 +65,6 @@ let updateProfile (pid : Guid) (profile : ProfileDto) =
             Log.Error("Unhandled exception: {message}", ex)
             Failure { HttpStatusCode = HttpStatusCode.InternalServerError; Body = "An unhandled error occurred:\n" + ex.ToString() }
 
-let getAdmin aid =
-    match getProfile aid with
-    | Success profile -> profileToAdmin profile |> Success
-    | Failure error -> Failure error
-
-let getSpeaker sid =
-    match getProfile sid with
-    | Success profile -> profileToSpeaker profile |> Success
-    | Failure error -> Failure error
-
-
 let updateSpeaker sid (speaker : Speaker) = 
     if sid <> speaker.Id then
         Failure { HttpStatusCode = HttpStatusCode.BadRequest 
@@ -105,5 +72,5 @@ let updateSpeaker sid (speaker : Speaker) =
     else 
         let profile = speakerToProfile speaker
         match updateProfile sid profile with
-        | Success profile -> profileToSpeaker profile |> Success
+        | Success profile -> Profile.toSpeaker [] profile |> Success //TODO handles
         | Failure error -> Failure error
