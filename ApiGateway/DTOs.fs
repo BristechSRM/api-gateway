@@ -32,7 +32,7 @@ type LastContactDto =
       ProfileIdOne : Guid
       ProfileIdTwo : Guid }
 
-type HandleDto =
+type Handle =
     { Type : string
       Identifier : string }
 

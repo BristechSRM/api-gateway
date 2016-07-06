@@ -18,10 +18,6 @@ let profilesUri =
     else
         url
 
-let handleToHandleDto (handle : Models.Handle) : Dtos.HandleDto = 
-    { Type = handle.Type
-      Identifier = handle.Identifier }
-
 let speakerToProfile (speaker : Speaker) : Profile = 
     { Id = speaker.Id 
       Forename = speaker.Forename
@@ -37,9 +33,9 @@ let getProfile(pid : Guid) =
     let result = client.GetAsync(profilesUri + pid.ToString()).Result
     match result.StatusCode with
     | HttpStatusCode.OK ->
-        let sessionJson = result.Content.ReadAsStringAsync().Result
+        let profileJson = result.Content.ReadAsStringAsync().Result
         Log.Information("Profiles endpoint found")
-        let profile = JsonConvert.DeserializeObject<Profile>(sessionJson)
+        let profile = JsonConvert.DeserializeObject<Profile>(profileJson)
         profile
     | _ ->
         let message = sprintf "Error Fetching profile: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
