@@ -7,10 +7,6 @@ open System.Net
 open System.Net.Http
 open Newtonsoft.Json
 open Serilog
-open Dtos
-open Models
-open LastContactRepository
-open DataTransform
 
 let getSessions() =  
     use client = new HttpClient()
@@ -19,9 +15,7 @@ let getSessions() =
     | HttpStatusCode.OK ->
         let sessionJson = result.Content.ReadAsStringAsync().Result
         Log.Information("Sessions endpoint found")
-        let sessions = JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
-        let lastContacts = getLastContacts()
-        sessions |> Seq.map (fun session -> Session.toModel(lastContacts, session))
+        JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
     | _ ->
         let message = sprintf "Error Fetching sessions: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
         Log.Error(message)
@@ -35,9 +29,7 @@ let getSession(id : Guid) =
     | HttpStatusCode.OK ->
         let sessionJson = result.Content.ReadAsStringAsync().Result
         Log.Information("Session endpoint found")
-        let session = JsonConvert.DeserializeObject<Dtos.Session>(sessionJson)
-        let lastContacts = getLastContacts()
-        Session.toModel(lastContacts, session)
+        JsonConvert.DeserializeObject<Dtos.Session>(sessionJson)
     | _ ->
         let message = sprintf "Error Fetching session: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
         Log.Error(message)
