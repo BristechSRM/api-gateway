@@ -14,7 +14,7 @@ type SpeakersController() =
 
     //TODO handles
     member x.Get(id : Guid) =
-        Catch.respond x HttpStatusCode.OK (fun () -> getProfile id |> Profile.toSpeaker [])
+        (fun () -> getProfile id |> Profile.toSpeaker []) |> Catch.respond x HttpStatusCode.OK 
 
     member x.Put(id : Guid, updatedSpeaker : Speaker) = 
         Log.Information("Received Put request for speaker with id: {id}", id)
