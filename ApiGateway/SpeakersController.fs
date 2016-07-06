@@ -4,6 +4,7 @@ open System.Net
 open System.Net.Http
 open System.Web.Http
 open Serilog
+open HandlesRepository
 open ProfilesRepository
 open System
 open Models
@@ -14,7 +15,11 @@ type SpeakersController() =
 
     //TODO handles
     member x.Get(id : Guid) =
-        (fun () -> getProfile id |> Profile.toSpeaker []) |> Catch.respond x HttpStatusCode.OK 
+        (fun () -> 
+            let profile = getProfile id 
+            let handlesDtos = getHandlesByProfileId id 
+            Profile.toSpeaker handlesDtos profile) 
+        |> Catch.respond x HttpStatusCode.OK 
 
     member x.Put(id : Guid, updatedSpeaker : Speaker) = 
         Log.Information("Received Put request for speaker with id: {id}", id)
