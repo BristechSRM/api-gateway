@@ -12,14 +12,14 @@ open Models
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
 
-let getIds (sessions: Session[]) =
+let getIds (sessions: Dtos.Session[]) =
     sessions
     |> Array.map (fun session -> session.Id)
 
 let onSameDay (datetime1: DateTime) (datetime2: DateTime) =
     datetime1.Date = datetime2.Date
 
-let convertToEventSession (session: Session) =
+let convertToEventSession (session: Dtos.Session) : Models.EventSession=
     { Id = session.Id
       Title = session.Title
       Description = session.Description
@@ -41,7 +41,7 @@ let getEvents() =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Sessions endpoint found")
-            let sessions = JsonConvert.DeserializeObject<Session[]>(sessionJson)
+            let sessions = JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
             let events =
                 sessions
                 |> Array.filter (fun session -> session.Date.IsSome)
@@ -71,7 +71,7 @@ let getEvent(id) =
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Sessions endpoint found")
             let sessions =
-                JsonConvert.DeserializeObject<Session[]>(sessionJson)
+                JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
                 |> Array.filter (fun session -> session.Date.IsSome && onSameDay session.Date.Value date)
                 |> Array.map convertToEventSession
             let event = { EventDetail.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
