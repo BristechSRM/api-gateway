@@ -14,4 +14,4 @@ type AdminsController() =
 
     //TODO handles
     member x.Get(id : Guid) =
-        Catch.respond x HttpStatusCode.OK (fun () -> getProfile id |> Profile.toAdmin [])
+        (fun () -> getProfile id |> Profile.toAdmin []) |> Catch.respond x HttpStatusCode.OK 
