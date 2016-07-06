@@ -11,24 +11,24 @@ open Dtos
 open Models
 open LastContactRepository
 
-let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
+let convertToSpeakerSummary (dto : Dtos.SpeakerSummaryDto) : Models.SpeakerSummary =
     { Id = dto.Id
       Forename = dto.Forename
       Surname = dto.Surname
       Rating = dto.Rating
       ImageUri = dto.ImageUri }
 
-let convertToAdminSummary (dto : AdminSummaryDto) : AdminSummary =
+let convertToAdminSummary (dto : Dtos.AdminSummaryDto) : Models.AdminSummary =
     { Id = dto.Id
       Forename = dto.Forename
       Surname = dto.Surname
       ImageUri = dto.ImageUri }
 
-let convertToLastContactSummary (dto : LastContact) : LastContactSummary =
+let convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
     { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
 
-let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastContact[]) =
+let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : Dtos.LastContact[]) =
     try
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
@@ -38,7 +38,7 @@ let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : LastConta
         Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
         None
 
-let convertToSessionSummary (lastContacts : LastContact[], session : SessionDto) : SessionSummary =
+let convertToSessionSummary (lastContacts : Dtos.LastContact[], session : Dtos.SessionDto) : Models.SessionSummary =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -53,7 +53,7 @@ let convertToSessionSummary (lastContacts : LastContact[], session : SessionDto)
       Admin = adm
       LastContact = lc }
 
-let convertToSessionDetail (lastContacts : LastContact[], session : SessionDto) : SessionDetail =
+let convertToSessionDetail (lastContacts : Dtos.LastContact[], session : Dtos.SessionDto) : Models.SessionDetail =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
