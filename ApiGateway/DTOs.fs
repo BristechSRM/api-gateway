@@ -2,7 +2,7 @@
 
 open System
 
-type SpeakerSummaryDto =
+type SpeakerSummary =
     { Id : Guid
       Forename : string
       Surname : string
@@ -10,21 +10,21 @@ type SpeakerSummaryDto =
       ImageUri : string
       Bio : string }
 
-type AdminSummaryDto =
+type AdminSummary =
     { Id : Guid
       Forename : string
       Surname : string
       ImageUri : string }
 
-type SessionDto =
+type Session =
     { Id : Guid
       Title : string
       Description : string
       Status : string
       Date : DateTime option
       DateAdded : string
-      Speaker : SpeakerSummaryDto
-      Admin : AdminSummaryDto option }
+      Speaker : SpeakerSummary
+      Admin : AdminSummary option }
 
 type LastContact =
     { Id : string
@@ -44,7 +44,7 @@ type Profile =
       Rating : int
       Bio : string }
 
-type CorrespondenceItemDto = 
+type CorrespondenceItem = 
     { Id : string
       ExternalId : string
       SenderId : string
