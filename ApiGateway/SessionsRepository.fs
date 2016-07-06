@@ -38,22 +38,7 @@ let getLastContact (senderId : Guid, receiverId : Guid, lastContacts : Dtos.Last
         Log.Error("getLastContact(id,id,contacts) - Exception: {ex}", ex)
         None
 
-let convertToSessionSummary (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.SessionSummary =
-    let spk = session.Speaker |> convertToSpeakerSummary
-    let adm = session.Admin |> Option.map convertToAdminSummary
-    let lc =
-        match adm with 
-        | Some admin -> getLastContact(admin.Id,spk.Id,lastContacts)
-        | None -> None
-    { Id = session.Id
-      Title = session.Title
-      Status = session.Status
-      Date = session.Date
-      Speaker = spk
-      Admin = adm
-      LastContact = lc }
-
-let convertToSessionDetail (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.SessionDetail =
+let convertToSessionDetail (lastContacts : Dtos.LastContact[], session : Dtos.Session) : Models.Session =
     let spk = session.Speaker |> convertToSpeakerSummary
     let adm = session.Admin |> Option.map convertToAdminSummary
     let lc =
@@ -78,9 +63,9 @@ let getSessions() =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Sessions endpoint found")
-            let sessions = JsonConvert.DeserializeObject<Session[]>(sessionJson)
+            let sessions = JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
             let lastContacts = getLastContacts()
-            Success(sessions |> Seq.map (fun session -> convertToSessionSummary(lastContacts, session)))
+            Success(sessions |> Seq.map (fun session -> convertToSessionDetail(lastContacts, session)))
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)
             Failure { HttpStatusCode = result.StatusCode; Body = result.ReasonPhrase }
@@ -98,7 +83,7 @@ let getSession(id : Guid) =
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Session endpoint found")
-            let session = JsonConvert.DeserializeObject<Session>(sessionJson)
+            let session = JsonConvert.DeserializeObject<Dtos.Session>(sessionJson)
             let lastContacts = getLastContacts()
             Success(convertToSessionDetail(lastContacts, session))
         | _ ->
