@@ -1,29 +1,14 @@
 ﻿module SessionsRepository
 
+open Config
 open Bristech.Srm.HttpConfig
 open System
-open System.Configuration
 open System.Net
 open System.Net.Http
 open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
-
-let sessionsUri = 
-    let url = ConfigurationManager.AppSettings.Get("SessionsUrl")
-    if String.IsNullOrEmpty url then
-        failwith "Missing configuration value: 'SessionsUrl'"
-    else
-        url
-
-let lastContactUri = 
-    let url = ConfigurationManager.AppSettings.Get("LastContactUrl")
-    if String.IsNullOrEmpty url then
-        failwith "Missing configuration value: 'LastContactUrl'"
-    else
-        url
-
 
 let convertToSpeakerSummary (dto : SpeakerSummaryDto) : SpeakerSummary =
     { Id = dto.Id
@@ -87,7 +72,7 @@ let getLastContacts() =
     use client = new HttpClient()
 
     try
-        let lastContactJson = client.GetAsync(lastContactUri).Result.Content.ReadAsStringAsync().Result
+        let lastContactJson = client.GetAsync(lastContactUrl).Result.Content.ReadAsStringAsync().Result
         Log.Information("Last contact endpoint found")
         JsonConvert.DeserializeObject<LastContactDto[]>(lastContactJson)
     with
@@ -99,7 +84,7 @@ let getSessions() =
     use client = new HttpClient()
 
     try
-        let result = client.GetAsync(sessionsUri).Result
+        let result = client.GetAsync(sessionsUrl).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result
@@ -119,7 +104,7 @@ let getSession(id : Guid) =
     use client = new HttpClient()
     
     try
-        let result = client.GetAsync(sessionsUri + id.ToString()).Result
+        let result = client.GetAsync(sessionsUrl + id.ToString()).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
             let sessionJson = result.Content.ReadAsStringAsync().Result

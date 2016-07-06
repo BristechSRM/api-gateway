@@ -1,5 +1,6 @@
 module Program
 
+open Config
 open Microsoft.Owin.Hosting
 open Logging
 open Serilog
@@ -19,10 +20,6 @@ let main _ =
     setupLogging()
 
     try
-        let baseUrl = ConfigurationManager.AppSettings.Get("BaseUrl")
-        if String.IsNullOrEmpty baseUrl then
-            failwith "Missing configuration value: 'BaseUrl'"
-
         // Without Auth:
         //use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
 
