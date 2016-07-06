@@ -23,8 +23,8 @@ type Session =
       Status : string
       Date : DateTime option
       DateAdded : string
-      Speaker : SpeakerSummary
-      Admin : AdminSummary option }
+      SpeakerId : Guid
+      AdminId : Guid option }
 
 type LastContact =
     { Id : string

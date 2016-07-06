@@ -1,6 +1,5 @@
 ﻿module DataTransform
 open System
-open Serilog
 
 module Handle = 
     let toHandle (dto : Dtos.Handle) : Models.Handle =
@@ -20,6 +19,12 @@ module Profile =
           ImageUri = profile.ImageUrl
           Handles = handles |> Seq.map Handle.toHandle }
 
+    let toAdminSummary (profile : Dtos.Profile) : Models.AdminSummary =
+        { Id = profile.Id
+          Forename = profile.Forename
+          Surname = profile.Surname
+          ImageUri = profile.ImageUrl }
+
     let toSpeaker (handles : Dtos.Handle seq) (profile : Dtos.Profile) : Models.Speaker =
         { Id = profile.Id
           Forename = profile.Forename
@@ -29,42 +34,32 @@ module Profile =
           Bio = profile.Bio
           Handles = handles |> Seq.map Handle.toHandle }
 
+    let toSpeakerSummary (profile : Dtos.Profile): Models.SpeakerSummary = 
+        { Id = profile.Id
+          Forename = profile.Forename
+          Surname = profile.Surname
+          Rating = profile.Rating
+          ImageUri = profile.ImageUrl }
+
 module Session = 
-
-    let private convertToSpeakerSummary (dto : Dtos.SpeakerSummary) : Models.SpeakerSummary =
-        { Id = dto.Id
-          Forename = dto.Forename
-          Surname = dto.Surname
-          Rating = dto.Rating
-          ImageUri = dto.ImageUri }
-
-    let private convertToAdminSummary (dto : Dtos.AdminSummary) : Models.AdminSummary =
-        { Id = dto.Id
-          Forename = dto.Forename
-          Surname = dto.Surname
-          ImageUri = dto.ImageUri }
 
     let convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
         { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
-
 
     let getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
         |> Option.map convertToLastContactSummary
 
-    let toModel (lastContacts : Dtos.LastContact[]) (session : Dtos.Session) : Models.Session =
-        let spk = session.Speaker |> convertToSpeakerSummary
-        let adm = session.Admin |> Option.map convertToAdminSummary
-        let lc =
-            match adm with 
-            | Some admin -> getLastContact admin.Id spk.Id lastContacts
-            | None -> None
+    let toModel lastContacts speaker admin (session : Dtos.Session) : Models.Session =
         { Id = session.Id
           Title = session.Title
           Status = session.Status
           Date = session.Date
           DateAdded = session.DateAdded
-          Speaker = spk
-          Admin = adm
-          LastContact = lc }
+          Speaker = speaker
+          Admin = admin
+          LastContact = 
+            match session.AdminId with 
+            | Some aid -> getLastContact aid session.SpeakerId lastContacts
+            | None -> None }
