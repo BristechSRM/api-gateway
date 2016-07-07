@@ -33,6 +33,7 @@
     <Compile Include="Logging.fs" />
     <Compile Include="Dtos.fs" />
     <Compile Include="Models.fs" />
+    <Compile Include="RestModels.fs" />
     <Compile Include="DataTransform.fs" />
     <Compile Include="LastContactProxy.fs" />
     <Compile Include="HandlesProxy.fs" />
