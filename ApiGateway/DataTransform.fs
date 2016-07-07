@@ -43,10 +43,10 @@ module Profile =
 
 module Session = 
 
-    let convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
+    let private convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
         { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
-    let getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =
+    let private getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =
         lastContacts
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
         |> Option.map convertToLastContactSummary
