@@ -1,35 +1,37 @@
 ﻿namespace Controllers
 
+open AdminProxy
+open DataTransform
+open LastContactProxy
+open RestModels
+open Serilog
+open SessionsProxy
+open SpeakerProxy
+open System
 open System.Net
 open System.Net.Http
 open System.Web.Http
-open Serilog
-open LastContactProxy
-open SpeakerProxy
-open AdminProxy
-open SessionsProxy
-open DataTransform
-open System
 
-type SessionsController() =
+type SessionsController() = 
     inherit ApiController()
-
-    member x.Get() =
+    
+    member x.Get() = 
         (fun () -> 
             let sessions = getSessions()
             let lastContacts = getLastContacts()
             sessions |> Seq.map (fun session -> 
                 let speaker = getSpeakerSummary session.SpeakerId
                 let admin = session.AdminId |> Option.map getAdminSummary
-                Session.toModel lastContacts speaker admin session)) 
-        |> Catch.respond x HttpStatusCode.OK 
-
-
-    member x.Get(id : Guid) =
+                Session.toModel lastContacts speaker admin session))
+        |> Catch.respond x HttpStatusCode.OK
+    
+    member x.Get(id : Guid) = 
         (fun () -> 
             let session = getSession id
             let speaker = getSpeakerSummary session.SpeakerId
             let admin = session.AdminId |> Option.map getAdminSummary
             let lastContacts = getLastContacts()
-            Session.toModel lastContacts speaker admin session) 
+            Session.toModel lastContacts speaker admin session)
         |> Catch.respond x HttpStatusCode.OK
+    
+    member x.Patch(id : Guid, op : PatchOp) = (fun () -> patchSession id op) |> Catch.respond x HttpStatusCode.NoContent
