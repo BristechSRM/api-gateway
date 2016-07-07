@@ -5,7 +5,7 @@ open System.Net
 open System.Net.Http
 open System.Web.Http
 open Models
-open CorrespondenceRepository
+open CorrespondenceProxy
 
 type CorrespondenceController() = 
     inherit ApiController()

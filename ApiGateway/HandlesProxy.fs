@@ -1,4 +1,4 @@
-﻿module HandlesRepository
+﻿module HandlesProxy
 
 open Config
 open Newtonsoft.Json

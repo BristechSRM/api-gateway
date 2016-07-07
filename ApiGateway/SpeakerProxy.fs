@@ -1,7 +1,7 @@
-﻿module SpeakerRepository
+﻿module SpeakerProxy
 
-open HandlesRepository
-open ProfilesRepository
+open HandlesProxy
+open ProfilesProxy
 open DataTransform
 
 let getSpeaker speakerId = 

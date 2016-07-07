@@ -1,4 +1,4 @@
-﻿module CorrespondenceRepository
+﻿module CorrespondenceProxy
 
 open System
 open System.Configuration

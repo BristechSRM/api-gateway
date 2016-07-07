@@ -3,7 +3,7 @@
 open System.Net
 open System.Net.Http
 open System.Web.Http
-open AdminRepository
+open AdminProxy
 open System
 
 type AdminsController() =
