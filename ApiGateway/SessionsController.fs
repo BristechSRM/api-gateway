@@ -1,23 +1,35 @@
 ﻿namespace Controllers
 
+open System.Net
 open System.Net.Http
 open System.Web.Http
 open Serilog
+open LastContactRepository
+open SpeakerRepository
+open AdminRepository
 open SessionsRepository
+open DataTransform
 open System
-open Models
 
 type SessionsController() =
     inherit ApiController()
 
     member x.Get() =
-        Log.Information("Received GET request for sessions")
-        match getSessions() with
-        | Success sessions -> x.Request.CreateResponse(sessions)
-        | Failure error -> x.Request.CreateResponse(error.HttpStatusCode, error.Body)
+        (fun () -> 
+            let sessions = getSessions()
+            let lastContacts = getLastContacts()
+            sessions |> Seq.map (fun session -> 
+                let speaker = getSpeakerSummary session.SpeakerId
+                let admin = session.AdminId |> Option.map getAdminSummary
+                Session.toModel lastContacts speaker admin session)) 
+        |> Catch.respond x HttpStatusCode.OK 
+
 
     member x.Get(id : Guid) =
-        Log.Information("Received GET request for a session with id {id}", id)
-        match getSession id with
-        | Success session -> x.Request.CreateResponse(session)
-        | Failure error -> x.Request.CreateResponse(error.HttpStatusCode, error.Body)
+        (fun () -> 
+            let session = getSession id
+            let speaker = getSpeakerSummary session.SpeakerId
+            let admin = session.AdminId |> Option.map getAdminSummary
+            let lastContacts = getLastContacts()
+            Session.toModel lastContacts speaker admin session) 
+        |> Catch.respond x HttpStatusCode.OK

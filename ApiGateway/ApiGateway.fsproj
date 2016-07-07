@@ -34,13 +34,13 @@
     <Compile Include="Dtos.fs" />
     <Compile Include="Models.fs" />
     <Compile Include="DataTransform.fs" />
-    <Compile Include="EventsRepository.fs" />
     <Compile Include="LastContactRepository.fs" />
     <Compile Include="HandlesRepository.fs" />
     <Compile Include="ProfilesRepository.fs" />
     <Compile Include="AdminRepository.fs" />
     <Compile Include="SpeakerRepository.fs" />
     <Compile Include="SessionsRepository.fs" />
+    <Compile Include="EventsRepository.fs" />
     <Compile Include="CorrespondenceRepository.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="DocsController.fs" />

@@ -34,17 +34,7 @@ type LastContactSummary =
       ReceiverId : Guid }
 
 [<CLIMutable>]
-type SessionSummary =
-    { Id : Guid
-      Title : string
-      Status : string
-      Date : DateTime option
-      Speaker : SpeakerSummary
-      Admin : AdminSummary option
-      LastContact : LastContactSummary option }
-
-[<CLIMutable>]
-type SessionDetail =
+type Session =
     { Id : Guid
       Title : string
       Status : string
