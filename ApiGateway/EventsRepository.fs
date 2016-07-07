@@ -8,6 +8,8 @@ open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
+open DataTransform
+open SpeakerRepository
 
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")
@@ -19,19 +21,7 @@ let getIds (sessions: Dtos.Session[]) =
 let onSameDay (datetime1: DateTime) (datetime2: DateTime) =
     datetime1.Date = datetime2.Date
 
-let convertToEventSession (session: Dtos.Session) : Models.EventSession=
-    { Id = session.Id
-      Title = session.Title
-      Description = session.Description
-      SpeakerId = session.Speaker.Id
-      SpeakerForename = session.Speaker.Forename
-      SpeakerSurname = session.Speaker.Surname
-      SpeakerBio = session.Speaker.Bio
-      SpeakerImageUri = session.Speaker.ImageUri
-      SpeakerRating = session.Speaker.Rating
-      StartDate = session.Date
-      EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
-
+//TODO these can be refactored to use Sessions Repository
 let getEvents() = 
     use client = new HttpClient()
 
@@ -73,7 +63,9 @@ let getEvent(id) =
             let sessions =
                 JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
                 |> Array.filter (fun session -> session.Date.IsSome && onSameDay session.Date.Value date)
-                |> Array.map convertToEventSession
+                |> Array.map (fun session -> 
+                    let speaker = getSpeaker session.SpeakerId
+                    Session.toEventSession speaker session)
             let event = { EventDetail.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = sessions }
             Success(event)
         | _ ->

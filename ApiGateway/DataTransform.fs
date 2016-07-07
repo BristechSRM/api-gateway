@@ -63,3 +63,16 @@ module Session =
             match session.AdminId with 
             | Some aid -> getLastContact aid session.SpeakerId lastContacts
             | None -> None }
+
+    let toEventSession (speaker : Models.Speaker) (session : Dtos.Session) : Models.EventSession = 
+        { Id = session.Id
+          Title = session.Title
+          Description = session.Description
+          SpeakerId = speaker.Id
+          SpeakerForename = speaker.Forename
+          SpeakerSurname = speaker.Surname
+          SpeakerBio = speaker.Bio
+          SpeakerImageUri = speaker.ImageUri
+          SpeakerRating = speaker.Rating
+          StartDate = session.Date
+          EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
