@@ -4,10 +4,10 @@ open System.Net
 open System.Net.Http
 open System.Web.Http
 open Serilog
-open LastContactRepository
-open SpeakerRepository
-open AdminRepository
-open SessionsRepository
+open LastContactProxy
+open SpeakerProxy
+open AdminProxy
+open SessionsProxy
 open DataTransform
 open System
 

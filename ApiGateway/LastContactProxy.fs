@@ -1,4 +1,4 @@
-﻿module LastContactRepository
+﻿module LastContactProxy
 
 open System.Net.Http
 open Newtonsoft.Json

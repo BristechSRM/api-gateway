@@ -3,7 +3,7 @@
 open System.Net.Http
 open System.Web.Http
 open Serilog
-open EventsRepository
+open EventsProxy
 open Models
 open System
 

@@ -1,7 +1,7 @@
-﻿module AdminRepository
+﻿module AdminProxy
 
-open HandlesRepository
-open ProfilesRepository
+open HandlesProxy
+open ProfilesProxy
 open DataTransform
 
 let getAdmin adminId = 
