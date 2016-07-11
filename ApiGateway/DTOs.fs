@@ -2,7 +2,7 @@
 
 open System
 
-type SpeakerSummary =
+type Speaker =
     { Id : Guid
       Forename : string
       Surname : string
@@ -10,7 +10,7 @@ type SpeakerSummary =
       ImageUri : string
       Bio : string }
 
-type AdminSummary =
+type Admin =
     { Id : Guid
       Forename : string
       Surname : string

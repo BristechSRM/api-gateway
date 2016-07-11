@@ -13,12 +13,28 @@ type Result<'Success, 'Failure> =
     | Failure of 'Failure
 
 [<CLIMutable>]
+type Handle =
+    { Type : string
+      Identifier : string }
+
+[<CLIMutable>]
 type SpeakerSummary =
     { Id : Guid
       Forename : string
       Surname : string
       Rating : int
-      ImageUri : string }
+      ImageUri : string 
+      Bio : string }
+
+[<CLIMutable>]
+type Speaker =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      Rating : int
+      ImageUri : string
+      Bio : string
+      Handles : Handle seq }
 
 [<CLIMutable>]
 type AdminSummary =
@@ -26,6 +42,14 @@ type AdminSummary =
       Forename : string
       Surname : string
       ImageUri : string }
+
+[<CLIMutable>]
+type Admin =
+    { Id : Guid
+      Forename : string
+      Surname : string
+      ImageUri : string
+      Handles : Handle seq }
 
 [<CLIMutable>]
 type LastContactSummary =
@@ -37,6 +61,7 @@ type LastContactSummary =
 type Session =
     { Id : Guid
       Title : string
+      Description : string
       Status : string
       Date : DateTime option
       DateAdded : string
@@ -73,29 +98,6 @@ type EventDetail =
       Description : string
       Location : string
       Sessions : EventSession[] }
-
-[<CLIMutable>]
-type Handle =
-    { Type : string
-      Identifier : string }
-
-[<CLIMutable>]
-type Speaker =
-    { Id : Guid
-      Forename : string
-      Surname : string
-      Rating : int
-      ImageUri : string
-      Bio : string
-      Handles : Handle seq }
-
-[<CLIMutable>]
-type Admin =
-    { Id : Guid
-      Forename : string
-      Surname : string
-      ImageUri : string
-      Handles : Handle seq }
 
 [<CLIMutable>]
 type CorrespondenceItem = 

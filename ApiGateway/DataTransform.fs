@@ -39,7 +39,8 @@ module Profile =
           Forename = profile.Forename
           Surname = profile.Surname
           Rating = profile.Rating
-          ImageUri = profile.ImageUrl }
+          ImageUri = profile.ImageUrl 
+          Bio = profile.Bio}
 
 module Session = 
 
@@ -54,6 +55,7 @@ module Session =
     let toModel lastContacts speaker admin (session : Dtos.Session) : Models.Session =
         { Id = session.Id
           Title = session.Title
+          Description = session.Description
           Status = session.Status
           Date = session.Date
           DateAdded = session.DateAdded
