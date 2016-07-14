@@ -21,10 +21,10 @@ let main _ =
 
     try
         // Without Auth:
-        //use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
+        use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
 
         // With Auth:
-        use server = WebApp.Start(baseUrl, StartupConfig.configure)
+        //use server = WebApp.Start(baseUrl, StartupConfig.configure)
         Log.Information("Listening on {Address}", baseUrl)
 
         let waitIndefinitelyWithToken = 

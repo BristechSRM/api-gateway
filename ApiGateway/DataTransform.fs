@@ -19,12 +19,6 @@ module Profile =
           ImageUri = profile.ImageUrl
           Handles = handles |> Seq.map Handle.toHandle }
 
-    let toAdminSummary (profile : Dtos.Profile) : Models.AdminSummary =
-        { Id = profile.Id
-          Forename = profile.Forename
-          Surname = profile.Surname
-          ImageUri = profile.ImageUrl }
-
     let toSpeaker (handles : Dtos.Handle seq) (profile : Dtos.Profile) : Models.Speaker =
         { Id = profile.Id
           Forename = profile.Forename
@@ -34,17 +28,9 @@ module Profile =
           Bio = profile.Bio
           Handles = handles |> Seq.map Handle.toHandle }
 
-    let toSpeakerSummary (profile : Dtos.Profile): Models.SpeakerSummary = 
-        { Id = profile.Id
-          Forename = profile.Forename
-          Surname = profile.Surname
-          Rating = profile.Rating
-          ImageUri = profile.ImageUrl 
-          Bio = profile.Bio}
-
 module Session = 
 
-    let private convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContactSummary =
+    let private convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContact =
         { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
 
     let private getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =

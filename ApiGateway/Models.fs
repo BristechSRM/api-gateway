@@ -18,15 +18,6 @@ type Handle =
       Identifier : string }
 
 [<CLIMutable>]
-type SpeakerSummary =
-    { Id : Guid
-      Forename : string
-      Surname : string
-      Rating : int
-      ImageUri : string 
-      Bio : string }
-
-[<CLIMutable>]
 type Speaker =
     { Id : Guid
       Forename : string
@@ -37,13 +28,6 @@ type Speaker =
       Handles : Handle seq }
 
 [<CLIMutable>]
-type AdminSummary =
-    { Id : Guid
-      Forename : string
-      Surname : string
-      ImageUri : string }
-
-[<CLIMutable>]
 type Admin =
     { Id : Guid
       Forename : string
@@ -52,7 +36,7 @@ type Admin =
       Handles : Handle seq }
 
 [<CLIMutable>]
-type LastContactSummary =
+type LastContact =
     { Date : DateTime
       SenderId : Guid
       ReceiverId : Guid }
@@ -65,9 +49,9 @@ type Session =
       Status : string
       Date : DateTime option
       DateAdded : string
-      Speaker : SpeakerSummary
-      Admin : AdminSummary option
-      LastContact : LastContactSummary option }
+      Speaker : Speaker
+      Admin : Admin option
+      LastContact : LastContact option }
 
 [<CLIMutable>]
 type EventSession =

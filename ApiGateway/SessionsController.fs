@@ -20,16 +20,16 @@ type SessionsController() =
             let sessions = getSessions()
             let lastContacts = getLastContacts()
             sessions |> Seq.map (fun session -> 
-                let speaker = getSpeakerSummary session.SpeakerId
-                let admin = session.AdminId |> Option.map getAdminSummary
+                let speaker = getSpeaker session.SpeakerId
+                let admin = session.AdminId |> Option.map getAdmin
                 Session.toModel lastContacts speaker admin session))
         |> Catch.respond x HttpStatusCode.OK
     
     member x.Get(id : Guid) = 
         (fun () -> 
             let session = getSession id
-            let speaker = getSpeakerSummary session.SpeakerId
-            let admin = session.AdminId |> Option.map getAdminSummary
+            let speaker = getSpeaker session.SpeakerId
+            let admin = session.AdminId |> Option.map getAdmin
             let lastContacts = getLastContacts()
             Session.toModel lastContacts speaker admin session)
         |> Catch.respond x HttpStatusCode.OK
