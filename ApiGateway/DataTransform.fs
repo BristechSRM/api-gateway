@@ -3,11 +3,13 @@ open System
 
 module Handle = 
     let toHandle (dto : Dtos.Handle) : Models.Handle =
-        { Type = dto.Type
+        { Id = dto.Id
+          Type = dto.Type
           Identifier = dto.Identifier }
 
     let toHandleDto (handle : Models.Handle) : Dtos.Handle = 
-        { Type = handle.Type
+        { Id = handle.Id
+          Type = handle.Type
           Identifier = handle.Identifier }
 
 module Profile = 
