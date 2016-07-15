@@ -33,7 +33,8 @@ type LastContact =
       ProfileIdTwo : Guid }
 
 type Handle =
-    { Type : string
+    { Id : int
+      Type : string
       Identifier : string }
 
 type Profile =

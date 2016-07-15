@@ -14,7 +14,8 @@ type Result<'Success, 'Failure> =
 
 [<CLIMutable>]
 type Handle =
-    { Type : string
+    { Id : int 
+      Type : string
       Identifier : string }
 
 [<CLIMutable>]
