@@ -24,7 +24,7 @@ resources:
 - name: code
   type: git
   source:
-    uri: https://github.com/BristechSRM/api-gateway.git
+    uri: https://github.com/BristechSRM/gateway.git
 
 - name: image
   type: docker-image
@@ -32,15 +32,15 @@ resources:
     email: {{docker-hub-email}}
     username: bristechsrm
     password: {{docker-hub-password}}
-    repository: bristechsrm/api-gateway
+    repository: bristechsrm/gateway
 
 - name: swarm
   type: docker-swarm-deploy
   source:
-    serviceName: api-gateway
-    executableName: ApiGateway
-    nodeName: {{apiGatewayNode}}
+    serviceName: gateway
+    executableName: Gateway
+    nodeName: {{gatewayNode}}
     portNumber: 8080
-    repository: bristechsrm/api-gateway
+    repository: bristechsrm/gateway
     swarmMasterIp: {{swarmMasterIp}}
     network: bridge

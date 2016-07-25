@@ -4,4 +4,4 @@ COPY binaries/ service/
 
 EXPOSE 8080
 
-CMD ["mono", "service/ApiGateway.exe"]
+CMD ["mono", "service/Gateway.exe"]
