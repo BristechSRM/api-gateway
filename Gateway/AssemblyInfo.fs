@@ -1,9 +1,9 @@
-﻿module ApiGateway.AssemblyInfo
+﻿module Gateway.AssemblyInfo
 
 open System.Reflection
 open System.Runtime.CompilerServices
 
-[<assembly:AssemblyTitle("ApiGateway")>]
+[<assembly:AssemblyTitle("Gateway")>]
 [<assembly:AssemblyDescription("")>]
 [<assembly:AssemblyConfiguration("")>]
 [<assembly:AssemblyCompany("")>]

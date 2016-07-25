@@ -6,9 +6,9 @@
     <ProjectGuid>{8C6A0976-09D1-465B-BBA5-5A552BF4B6D3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>ApiGateway</RootNamespace>
-    <AssemblyName>ApiGateway</AssemblyName>
+    <AssemblyName>Gateway</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <Name>ApiGateway</Name>
+    <Name>Gateway</Name>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
   </PropertyGroup>
