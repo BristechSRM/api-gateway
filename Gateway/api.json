@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "Api Gateway",
+        "title": "Gateway",
         "description": "Aggregates requests to multiple microservices into a single response",
         "version": "1.0.0"
     },
@@ -17,7 +17,7 @@
         "/admins/{adminId}": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves the details of the specified admin",
                 "description": "The full admin details are retrieved",
@@ -50,7 +50,7 @@
         "/events": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves event summaries.",
                 "description": "The event summary details including ...",
@@ -76,7 +76,7 @@
         "/events/{eventId}": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves the details of the specified event.",
                 "description": "The full event details are retrieved.",
@@ -109,7 +109,7 @@
         "/sessions": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves session summaries.",
                 "description": "The session summary details including session status, title and basic speaker and admin details.",
@@ -135,7 +135,7 @@
         "/sessions/{sessionId}": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves the details of the specified session.",
                 "description": "The full session details are retrieved.",
@@ -168,7 +168,7 @@
         "/speakers/{speakerId}": {
             "get": {
                 "tags": [
-                    "api-gateway"
+                    "gateway"
                 ],
                 "summary": "Retrieves the details of the specified speaker",
                 "description": "The full speaker details are retrieved",
