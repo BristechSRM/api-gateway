@@ -45,7 +45,7 @@ type Profile =
       Rating : int
       Bio : string }
 
-type CorrespondenceItem = 
+type CorrespondenceItem =
     { Id : string
       ExternalId : string
       SenderId : string
