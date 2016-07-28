@@ -9,35 +9,11 @@ open Serilog
 open Dtos
 open RestModels
 open System.Text
+open JsonHttpClient
 
-let getHandlesByProfileId (pid : Guid) = 
-    use client = new HttpClient()
+let getHandlesByProfileId (pid : Guid) = get<Handle []>(new Uri(handlesUrl + "?profileId=" + pid.ToString()))
 
-    let result = client.GetAsync(handlesUrl + "?profileId=" + pid.ToString()).Result
-    match result.StatusCode with
-    | HttpStatusCode.OK -> 
-        let handlesJson = result.Content.ReadAsStringAsync().Result
-        Log.Information("Handles endpoint found")
-        let handles = JsonConvert.DeserializeObject<Handle []>(handlesJson)
-        handles
-    | _ -> 
-        let message = sprintf "Error Fetching handles: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
-        Log.Error(message)
-        raise <| Exception(message)
-
-let getHandle (hid : int) = 
-    use client = new HttpClient()
-    
-    let result = client.GetAsync(handlesUrl + hid.ToString()).Result
-    match result.StatusCode with
-    | HttpStatusCode.OK -> 
-        let handleJson = result.Content.ReadAsStringAsync().Result
-        Log.Information("Profiles endpoint found")
-        JsonConvert.DeserializeObject<Handle>(handleJson)
-    | _ -> 
-        let message = sprintf "Error Fetching handle: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
-        Log.Error(message)
-        raise <| Exception(message)
+let getHandle (hid : int) = get<Handle>(new Uri(handlesUrl + hid.ToString()))
 
 let patchHandle (hid : int) (op : PatchOp) =
     use client = new HttpClient()

@@ -1,19 +1,15 @@
 ﻿module LastContactProxy
 
-open System.Net.Http
-open Newtonsoft.Json
+open System
 open Serilog
 open Dtos
 open Config
+open JsonHttpClient
 
-let getLastContacts() =
-    use client = new HttpClient()
-
+let getLastContacts () =     
     try
-        let lastContactJson = client.GetAsync(lastContactUrl).Result.Content.ReadAsStringAsync().Result
-        Log.Information("Last contact endpoint found")
-        JsonConvert.DeserializeObject<LastContact[]>(lastContactJson)
-    with
-    | ex ->
+        get<LastContact []>(new Uri(lastContactUrl))
+    with 
+    | ex -> 
         Log.Error("getLastContacts() - Exception: {ex}", ex)
         [||]
