@@ -1,6 +1,7 @@
 ﻿module SessionsProxy
 
 open Config
+open Dtos
 open Bristech.Srm.HttpConfig
 open System
 open System.Net
@@ -9,33 +10,11 @@ open Newtonsoft.Json
 open Serilog
 open RestModels
 open System.Text
+open JsonHttpClient
 
-let getSessions() =  
-    use client = new HttpClient()
-    let result = client.GetAsync(sessionsUrl).Result
-    match result.StatusCode with
-    | HttpStatusCode.OK ->
-        let sessionJson = result.Content.ReadAsStringAsync().Result
-        Log.Information("Sessions endpoint found")
-        JsonConvert.DeserializeObject<Dtos.Session[]>(sessionJson)
-    | _ ->
-        let message = sprintf "Error Fetching sessions: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
-        Log.Error(message)
-        raise <| Exception(message)
+let getSessions() = get<Session []>(new Uri(sessionsUrl))
 
-let getSession(id : Guid) =
-    use client = new HttpClient()
-    
-    let result = client.GetAsync(sessionsUrl + id.ToString()).Result
-    match result.StatusCode with
-    | HttpStatusCode.OK ->
-        let sessionJson = result.Content.ReadAsStringAsync().Result
-        Log.Information("Session endpoint found")
-        JsonConvert.DeserializeObject<Dtos.Session>(sessionJson)
-    | _ ->
-        let message = sprintf "Error Fetching session: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
-        Log.Error(message)
-        raise <| Exception(message)
+let getSession (sid : Guid) = get<Session>(new Uri(sessionsUrl + sid.ToString()))
 
 let patchSession (pid : Guid) (op : PatchOp) = 
     use client = new HttpClient()

@@ -9,21 +9,9 @@ open Serilog
 open Dtos
 open RestModels
 open System.Text
+open JsonHttpClient
 
-let getProfile (pid : Guid) =
-    use client = new HttpClient()
-    
-    let result = client.GetAsync(profilesUrl + pid.ToString()).Result
-    match result.StatusCode with
-    | HttpStatusCode.OK ->
-        let profileJson = result.Content.ReadAsStringAsync().Result
-        Log.Information("Profiles endpoint found")
-        let profile = JsonConvert.DeserializeObject<Profile>(profileJson)
-        profile
-    | _ ->
-        let message = sprintf "Error Fetching profile: Status code: %A. Reason: %s" result.StatusCode result.ReasonPhrase
-        Log.Error(message)
-        raise <| Exception(message)
+let getProfile (pid : Guid) = get<Profile>(new Uri(profilesUrl + pid.ToString()))
 
 let patchProfile (pid : Guid) (op : PatchOp) = 
     use client = new HttpClient()
