@@ -9,5 +9,6 @@ open System
 type AdminsController() =
     inherit ApiController()
 
-    member x.Get(id : Guid) =
-        (fun () -> getAdmin id) |> Catch.respond x HttpStatusCode.OK 
+    member x.Get(id : Guid) = (fun () -> getAdmin id) |> Catch.respond x HttpStatusCode.OK 
+
+    member x.Get() = (fun () -> getAdmins ()) |> Catch.respond x HttpStatusCode.OK
