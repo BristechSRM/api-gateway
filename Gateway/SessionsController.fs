@@ -33,5 +33,7 @@ type SessionsController() =
             let lastContacts = getLastContacts()
             Session.toModel lastContacts speaker admin session)
         |> Catch.respond x HttpStatusCode.OK
+
+    member x.Post(session : Models.Session) = (fun () -> session |> Session.toDto |> addSession) |> Catch.respond x HttpStatusCode.Created
     
     member x.Patch(id : Guid, op : PatchOp) = (fun () -> patchSession id op) |> Catch.respond x HttpStatusCode.NoContent
