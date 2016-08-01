@@ -2,7 +2,7 @@
 
 open ProfilesProxy
 open RestModels
-open SpeakerProxy
+open SpeakerFacade
 open System
 open System.Net
 open System.Net.Http

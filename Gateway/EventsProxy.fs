@@ -9,7 +9,7 @@ open Serilog
 open Dtos
 open Models
 open DataTransform
-open SpeakerProxy
+open SpeakerFacade
 
 let convertToISO8601 (datetime : DateTime) =
     datetime.ToString("yyyy-MM-ddTHH\:mm\:ss\Z")

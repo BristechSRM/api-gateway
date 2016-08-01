@@ -1,4 +1,4 @@
-﻿module SpeakerProxy
+﻿module SpeakerFacade
 
 open HandlesProxy
 open ProfilesProxy
