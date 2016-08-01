@@ -54,6 +54,16 @@ module Session =
             | Some aid -> getLastContact aid session.SpeakerId lastContacts
             | None -> None }
 
+    let toDto (session : Models.Session) : Dtos.Session = 
+        { Id = session.Id 
+          Title = session.Title
+          Description = session.Description
+          Status = session.Status
+          Date = session.Date
+          DateAdded = session.DateAdded 
+          SpeakerId = session.Speaker.Id
+          AdminId = session.Admin |> Option.map (fun admin -> admin.Id) }
+
     let toEventSession (speaker : Models.Speaker) (session : Dtos.Session) : Models.EventSession = 
         { Id = session.Id
           Title = session.Title

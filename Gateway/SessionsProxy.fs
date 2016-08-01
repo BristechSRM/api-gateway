@@ -16,6 +16,8 @@ let getSessions() = get<Session []>(new Uri(sessionsUrl))
 
 let getSession (sid : Guid) = get<Session>(new Uri(sessionsUrl + sid.ToString()))
 
+let addSession (session : Session) = postAndGetGuid (new Uri(sessionsUrl)) session
+
 let patchSession (pid : Guid) (op : PatchOp) = 
     use client = new HttpClient()
     
