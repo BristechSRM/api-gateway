@@ -55,12 +55,12 @@ module Session =
             | None -> None }
 
     let toDto (session : Models.Session) : Dtos.Session = 
-        { Id = session.Id 
+        { Id = session.Id
           Title = session.Title
           Description = session.Description
           Status = session.Status
           Date = session.Date
-          DateAdded = session.DateAdded 
+          DateAdded = session.DateAdded
           SpeakerId = session.Speaker.Id
           AdminId = session.Admin |> Option.map (fun admin -> admin.Id) }
 
