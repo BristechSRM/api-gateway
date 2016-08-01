@@ -1,12 +1,12 @@
 ﻿namespace Controllers
 
-open AdminProxy
+open AdminFacade
 open DataTransform
 open LastContactProxy
 open RestModels
 open Serilog
 open SessionsProxy
-open SpeakerProxy
+open SpeakerFacade
 open System
 open System.Net
 open System.Net.Http

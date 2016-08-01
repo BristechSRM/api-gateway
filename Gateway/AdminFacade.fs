@@ -1,4 +1,4 @@
-﻿module AdminProxy
+﻿module AdminFacade
 
 open HandlesProxy
 open ProfilesProxy

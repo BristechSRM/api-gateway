@@ -39,8 +39,8 @@
     <Compile Include="LastContactProxy.fs" />
     <Compile Include="HandlesProxy.fs" />
     <Compile Include="ProfilesProxy.fs" />
-    <Compile Include="AdminProxy.fs" />
-    <Compile Include="SpeakerProxy.fs" />
+    <Compile Include="AdminFacade.fs" />
+    <Compile Include="SpeakerFacade.fs" />
     <Compile Include="SessionsProxy.fs" />
     <Compile Include="EventsProxy.fs" />
     <Compile Include="CorrespondenceProxy.fs" />
