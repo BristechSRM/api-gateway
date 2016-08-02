@@ -9,16 +9,7 @@ open Serilog
 open Dtos
 open Models
 open Config
-
-let convertToCorrespondenceItem (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
-    { Id = correspondenceItem.Id
-      SenderId = correspondenceItem.SenderId
-      ReceiverId = correspondenceItem.ReceiverId
-      Date = correspondenceItem.Date
-      Message = correspondenceItem.Message
-      Type = correspondenceItem.Type
-      SenderHandle = correspondenceItem.SenderHandle
-      ReceiverHandle = correspondenceItem.ReceiverHandle }
+open DataTransform
 
 let getCorrespondence(senderId : string, receiverId : string) =
     use client = new HttpClient()
@@ -31,7 +22,7 @@ let getCorrespondence(senderId : string, receiverId : string) =
             let correspondenceJson = result.Content.ReadAsStringAsync().Result
             Log.Information("Correspondence endpoint found")
             JsonConvert.DeserializeObject<Dtos.CorrespondenceItem[]>(correspondenceJson)
-            |> Seq.map convertToCorrespondenceItem
+            |> Seq.map Correspondence.toModel
             |> Success
         | _ ->
             Log.Information("Status code: {statusCode}. Reason: {reasonPhrase}", result.StatusCode, result.ReasonPhrase)

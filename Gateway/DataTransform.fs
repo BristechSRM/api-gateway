@@ -76,3 +76,14 @@ module Session =
           SpeakerRating = speaker.Rating
           StartDate = session.Date
           EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
+
+module Correspondence = 
+    let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
+    { Id = correspondenceItem.Id
+      SenderId = correspondenceItem.SenderId
+      ReceiverId = correspondenceItem.ReceiverId
+      Date = correspondenceItem.Date
+      Message = correspondenceItem.Message
+      Type = correspondenceItem.Type
+      SenderHandle = correspondenceItem.SenderHandle
+      ReceiverHandle = correspondenceItem.ReceiverHandle }
