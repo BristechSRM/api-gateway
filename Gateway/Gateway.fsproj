@@ -39,6 +39,7 @@
     <Compile Include="LastContactProxy.fs" />
     <Compile Include="HandlesProxy.fs" />
     <Compile Include="ProfilesProxy.fs" />
+    <Compile Include="ProfilesFacade.fs" />
     <Compile Include="AdminFacade.fs" />
     <Compile Include="SpeakerFacade.fs" />
     <Compile Include="SessionsProxy.fs" />
