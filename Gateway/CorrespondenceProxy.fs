@@ -8,13 +8,7 @@ open Newtonsoft.Json
 open Serilog
 open Dtos
 open Models
-
-let correspondenceUri = 
-    let url = ConfigurationManager.AppSettings.Get("CorrespondenceUrl")
-    if String.IsNullOrEmpty url then
-        failwith "Missing configuration value: 'CorrespondenceUrl'"
-    else
-        url
+open Config
 
 let convertToCorrespondenceItem (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
     { Id = correspondenceItem.Id
@@ -30,7 +24,7 @@ let getCorrespondence(senderId : string, receiverId : string) =
     use client = new HttpClient()
 
     try
-        let uri = String.Format("{0}?profileIdOne={1}&profileIdTwo={2}", correspondenceUri, senderId, receiverId)
+        let uri = String.Format("{0}?profileIdOne={1}&profileIdTwo={2}", correspondenceUrl, senderId, receiverId)
         let result = client.GetAsync(uri).Result
         match result.StatusCode with
         | HttpStatusCode.OK ->
