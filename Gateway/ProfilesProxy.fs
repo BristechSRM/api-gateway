@@ -15,6 +15,8 @@ let getProfiles () = get<Profile []>(new Uri(profilesUrl))
 
 let getProfile (pid : Guid) = get<Profile>(new Uri(profilesUrl + pid.ToString()))
 
+let getAdminProfiles () = get<Profile []>(new Uri(profilesUrl + "?isAdmin=true"))
+
 let patchProfile (pid : Guid) (op : PatchOp) = 
     use client = new HttpClient()
     

@@ -1,10 +1,8 @@
 ﻿module AdminFacade
 
-open HandlesProxy
-open ProfilesProxy
+open ProfilesFacade
 open DataTransform
 
-let getAdmin adminId = 
-    let profile = getProfile adminId
-    let handlesDtos = getHandlesByProfileId adminId
-    Profile.toAdmin handlesDtos profile
+let getAdmin adminId = getProfileAndConvertWith Profile.toAdmin adminId
+
+let getAdmins () = getProfilesAndConvertWith ProfilesProxy.getAdminProfiles Profile.toAdmin
