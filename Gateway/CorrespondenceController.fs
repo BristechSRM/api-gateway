@@ -13,4 +13,3 @@ type CorrespondenceController() =
             let correspondence = getCorrespondence senderId receiverId
             correspondence |> Seq.map Correspondence.toModel)
         |> Catch.respond x HttpStatusCode.OK
-  
