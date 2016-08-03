@@ -43,7 +43,7 @@
     <Compile Include="AdminFacade.fs" />
     <Compile Include="SpeakerFacade.fs" />
     <Compile Include="SessionsProxy.fs" />
-    <Compile Include="EventsProxy.fs" />
+    <Compile Include="EventsFacade.fs" />
     <Compile Include="CorrespondenceProxy.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="DocsController.fs" />
