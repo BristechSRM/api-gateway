@@ -8,8 +8,4 @@ open DataTransform
 type CorrespondenceController() = 
     inherit ApiController()
 
-    member x.Get(senderId : string, receiverId : string) = 
-        (fun () -> 
-            let correspondence = getCorrespondence senderId receiverId
-            correspondence |> Seq.map Correspondence.toModel)
-        |> Catch.respond x HttpStatusCode.OK
+    member x.Get(senderId : string, receiverId : string) = (fun () -> getCorrespondence senderId receiverId |> Seq.map Correspondence.toModel) |> Catch.respond x HttpStatusCode.OK
