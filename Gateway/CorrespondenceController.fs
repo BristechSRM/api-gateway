@@ -1,10 +1,7 @@
 ﻿module CorrespondenceController
 
-open Serilog
 open System.Net
-open System.Net.Http
 open System.Web.Http
-open Models
 open CorrespondenceProxy
 open DataTransform
 

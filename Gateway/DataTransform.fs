@@ -1,4 +1,5 @@
 ﻿module DataTransform
+
 open System
 
 module Handle = 
@@ -79,11 +80,11 @@ module Session =
 
 module Correspondence = 
     let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
-    { Id = correspondenceItem.Id
-      SenderId = correspondenceItem.SenderId
-      ReceiverId = correspondenceItem.ReceiverId
-      Date = correspondenceItem.Date
-      Message = correspondenceItem.Message
-      Type = correspondenceItem.Type
-      SenderHandle = correspondenceItem.SenderHandle
-      ReceiverHandle = correspondenceItem.ReceiverHandle }
+        { Id = correspondenceItem.Id
+          SenderId = correspondenceItem.SenderId
+          ReceiverId = correspondenceItem.ReceiverId
+          Date = correspondenceItem.Date
+          Message = correspondenceItem.Message
+          Type = correspondenceItem.Type
+          SenderHandle = correspondenceItem.SenderHandle
+          ReceiverHandle = correspondenceItem.ReceiverHandle }
