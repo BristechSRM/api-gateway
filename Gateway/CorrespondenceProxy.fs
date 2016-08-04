@@ -5,6 +5,4 @@ open Dtos
 open JsonHttpClient
 open System
 
-let getCorrespondence (senderId : string) (receiverId : string) = 
-    let uri = Uri <| String.Format("{0}?profileIdOne={1}&profileIdTwo={2}", correspondenceUrl, senderId, receiverId)
-    get<CorrespondenceItem []>(uri)
+let getCorrespondence (senderId : string) (receiverId : string) = get<CorrespondenceItem []> <| new Uri(correspondenceUri, sprintf "?profileIdOne=%s&profileIdTwo=%s" senderId receiverId)

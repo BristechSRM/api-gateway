@@ -8,7 +8,7 @@ open JsonHttpClient
 
 let getLastContacts () =     
     try
-        get<LastContact []>(new Uri(lastContactUrl))
+        get<LastContact []> lastContactUri
     with 
     | ex -> 
         Log.Error("getLastContacts() - Exception: {ex}", ex)
