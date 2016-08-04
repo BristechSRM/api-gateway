@@ -6,10 +6,10 @@ open JsonHttpClient
 open RestModels
 open System
 
-let getProfiles() = get<Profile []> (new Uri(profilesUrl))
+let getProfiles() = get<Profile []> profilesUri
 
-let getProfile (pid : Guid) = get<Profile> (new Uri(profilesUrl + pid.ToString()))
+let getProfile (pid : Guid) = get<Profile> <| new Uri(profilesUri, pid.ToString())
 
-let getAdminProfiles() = get<Profile []> (new Uri(profilesUrl + "?isAdmin=true"))
+let getAdminProfiles() = get<Profile []> <| new Uri(profilesUri, "?isAdmin=true")
 
-let patchProfile (pid : Guid) (op : PatchOp) = patch (new Uri(profilesUrl)) pid op
+let patchProfile (pid : Guid) (op : PatchOp) = patch profilesUri pid op
