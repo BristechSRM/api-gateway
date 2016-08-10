@@ -1,7 +1,7 @@
 ﻿module JsonSettings
 
 open Newtonsoft.Json
-open Bristech.Srm.HttpConfig
+open Common
 
 let setDefaults () = 
     JsonConvert.DefaultSettings <- (fun () -> 
