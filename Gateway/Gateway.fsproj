@@ -36,15 +36,15 @@
     <Compile Include="RestModels.fs" />
     <Compile Include="DataTransform.fs" />
     <Compile Include="JsonHttpClient.fs" />
+    <Compile Include="CorrespondenceProxy.fs" />
     <Compile Include="LastContactProxy.fs" />
     <Compile Include="HandlesProxy.fs" />
     <Compile Include="ProfilesProxy.fs" />
+    <Compile Include="SessionsProxy.fs" />
     <Compile Include="ProfilesFacade.fs" />
     <Compile Include="AdminFacade.fs" />
     <Compile Include="SpeakerFacade.fs" />
-    <Compile Include="SessionsProxy.fs" />
     <Compile Include="EventsFacade.fs" />
-    <Compile Include="CorrespondenceProxy.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="DocsController.fs" />
     <Compile Include="CorrespondenceController.fs" />
@@ -53,6 +53,8 @@
     <Compile Include="SessionsController.fs" />
     <Compile Include="SpeakersController.fs" />
     <Compile Include="HandlesController.fs" />
+    <Compile Include="LogExceptionHandler.fs" />
+    <Compile Include="LogHttpMiddleware.fs" />
     <Compile Include="StartupConfig.fs" />
     <Compile Include="Program.fs" />
     <None Include="packages.config" />
@@ -64,9 +66,8 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Bristech.Srm.HttpConfig">
-      <HintPath>..\packages\Bristech.Srm.HttpConfig.0.1.5.0\lib\net45\Bristech.Srm.HttpConfig.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Bristech.Srm.Common">
+      <HintPath>..\packages\Bristech.Srm.Common.0.1.0\lib\net45\Bristech.Srm.Common.dll</HintPath>
     </Reference>
     <Reference Include="FSharp.Core">
       <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>

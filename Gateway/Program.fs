@@ -20,10 +20,6 @@ let main _ =
     setupLogging()
 
     try
-        // Without Auth:
-        //use server = WebApp.Start<Bristech.Srm.HttpConfig.Startup>(baseUrl)
-
-        // With Auth:
         use server = WebApp.Start(baseUrl, StartupConfig.configure)
         Log.Information("Listening on {Address}", baseUrl)
 

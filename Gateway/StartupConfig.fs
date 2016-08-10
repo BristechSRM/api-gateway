@@ -1,10 +1,13 @@
 ﻿module StartupConfig
 
+open Common
+open LogHttpMiddleware
+open LogExceptionHandler
 open Serilog
 open Owin
 open System.Web.Http
+open System.Web.Http.ExceptionHandling
 open IdentityServer3.AccessTokenValidation
-open Bristech.Srm.HttpConfig
 open System.Configuration
 open Owin.Security.AesDataProtectorProvider
 
@@ -22,12 +25,23 @@ let configureDataProtection (app : IAppBuilder) =
     app.UseAesDataProtectorProvider("key")
     app
 
-let configureWebApi (app : IAppBuilder) = 
-    let config = Default.config |> configureFilters
+let configureWebApi (app : IAppBuilder) =
+    app.Use LogHttpMiddleware |> ignore
+
+    let config =
+      new HttpConfiguration()
+      |> Logging.configure
+      |> Cors.configure
+      |> Routes.configure
+      |> Serialization.configure
+      |> configureFilters
+
+    config.Services.Replace(typedefof<IExceptionHandler>, new LogExceptionHandler())
+
     app.UseWebApi(config) 
 
 let configure (app : IAppBuilder) = 
-    Log.Information("Performing Custom Auth configuration")
+    Log.Information("Configured to require bearer token")
     app 
     |> configureBearerTokenAuth
     |> configureDataProtection
