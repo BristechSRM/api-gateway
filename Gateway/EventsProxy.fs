@@ -7,3 +7,7 @@ open System
 
 let getEvents() =
   get<Event []> eventsUri
+
+let getEvent(id : Guid) =
+  get<Event> <| new Uri(eventsUri, id.ToString())
+

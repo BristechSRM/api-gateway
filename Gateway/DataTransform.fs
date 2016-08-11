@@ -102,3 +102,17 @@ module Event =
           Location = event.Name
           Sessions = [| |]
           }
+
+    let toEventDetail (event: Dtos.Event) : Models.EventDetail =
+        { Id = event.Id 
+          Date = 
+            match event.Date with 
+            | None ->
+                DateTime.Today
+            | Some thing ->
+                thing
+          Description = event.Name
+          Location = event.Name
+          Sessions = [| |]
+          }
+
