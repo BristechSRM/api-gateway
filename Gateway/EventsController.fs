@@ -41,4 +41,3 @@ type EventsController() =
   member this.Post(event: Event) =
     let guid = event |> Event.toDto |> EventsProxy.postEvent
     this.Request.CreateResponse(HttpStatusCode.Created, guid)
-    
