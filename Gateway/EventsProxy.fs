@@ -11,3 +11,5 @@ let getEvents() =
 let getEvent(id : Guid) =
   get<Event> <| new Uri(eventsUri, id.ToString())
 
+let postEvent(event: Event) =
+  postAndGetGuid eventsUri event

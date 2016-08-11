@@ -116,3 +116,8 @@ module Event =
           Sessions = [| |]
           }
 
+    let toDto (event: Models.Event) : Dtos.Event =
+        { Id = event.Id 
+          Date = event.Date
+          Name = event.Name }
+
