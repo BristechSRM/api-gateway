@@ -37,3 +37,7 @@ type EventsController() =
         this.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")
       | _ ->
         this.Request.CreateResponse(HttpStatusCode.OK, oldevent)
+
+  member this.Post(event: Event) =
+    let guid = event |> Event.toDto |> EventsProxy.postEvent
+    this.Request.CreateResponse(HttpStatusCode.Created, guid)
