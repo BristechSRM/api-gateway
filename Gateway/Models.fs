@@ -94,3 +94,9 @@ type CorrespondenceItem =
       Type : string
       SenderHandle : string
       ReceiverHandle : string }
+
+[<CLIMutable>]
+type Event =
+    { Id: string
+      Date: DateTime option
+      Name: string }

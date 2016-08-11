@@ -88,3 +88,17 @@ module Correspondence =
           Type = correspondenceItem.Type
           SenderHandle = correspondenceItem.SenderHandle
           ReceiverHandle = correspondenceItem.ReceiverHandle }
+
+module Event =
+    let toEventSummary (event: Dtos.Event) : Models.EventSummary =
+        { Id = event.Id 
+          Date = 
+            match event.Date with 
+            | None ->
+                DateTime.Today
+            | Some thing ->
+                thing
+          Description = event.Name
+          Location = event.Name
+          Sessions = [| |]
+          }

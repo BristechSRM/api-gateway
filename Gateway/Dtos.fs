@@ -55,3 +55,8 @@ type CorrespondenceItem =
       Type : string
       SenderHandle : string
       ReceiverHandle : string }
+
+type Event =
+    { Id: string
+      Date: DateTime option
+      Name: string }
