@@ -15,6 +15,7 @@ let getUriConfigValue (key : string) =
 let baseUrl = getConfigValue "BaseUrl"
 let handlesUri = getUriConfigValue "HandlesUrl"
 let sessionsUri = getUriConfigValue "SessionsUrl"
+let sessionIdsUri = getUriConfigValue "SessionIdsUrl"
 let profilesUri = getUriConfigValue "ProfilesUrl"
 let eventsUri = getUriConfigValue "EventsUrl"
 let lastContactUri = getUriConfigValue "LastContactUrl"
