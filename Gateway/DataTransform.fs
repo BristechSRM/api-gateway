@@ -90,31 +90,25 @@ module Correspondence =
           ReceiverHandle = correspondenceItem.ReceiverHandle }
 
 module Event =
-    let toEventSummary (event: Dtos.Event) : Models.EventSummary =
-        { Id = event.Id 
+    let toEventSummary sessionIds (event: Dtos.Event)  : Models.EventSummary =
+        { Id = event.Id
           Date = 
-            match event.Date with 
-            | None ->
-                DateTime.Today
-            | Some thing ->
-                thing
+              match event.Date with
+              | None -> DateTime.Today
+              | Some date -> date
           Description = event.Name
           Location = event.Name
-          Sessions = [| |]
-          }
+          Sessions = sessionIds }
 
-    let toEventDetail (event: Dtos.Event) : Models.EventDetail =
-        { Id = event.Id 
+    let toEventDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
+        { Id = event.Id
           Date = 
-            match event.Date with 
-            | None ->
-                DateTime.Today
-            | Some thing ->
-                thing
+              match event.Date with
+              | None -> DateTime.Today
+              | Some date -> date
           Description = event.Name
           Location = event.Name
-          Sessions = [| |]
-          }
+          Sessions = eventSessions }
 
     let toDto (event: Models.Event) : Dtos.Event =
         { Id = event.Id 
