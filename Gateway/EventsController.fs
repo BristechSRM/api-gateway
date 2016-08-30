@@ -1,43 +1,23 @@
 ﻿module EventsController
 
+open EventsFacade
 open DataTransform
 open Models
-open System
 open System.Net
 open System.Net.Http
 open System.Web.Http
 
 type EventsController() =
-  inherit ApiController()
+    inherit ApiController()
 
-  // Gets an array of EventSummary
-  // TODO: remove facade
-  member this.Get() =
-    let events = EventsProxy.getEvents()
-    let oldevents = EventsFacade.getEvents()
-    let allevents = Array.concat [ events |> Seq.map Event.toEventSummary |> Seq.toArray ; oldevents ]
-    this.Request.CreateResponse(HttpStatusCode.OK, allevents)
+    member x.Get() = (fun () -> getEventSummaries()) |> Catch.respond x HttpStatusCode.OK
 
-  // Gets a single EventDetail
-  // TODO: id: Guid
-  // TODO: remove facade
-  member this.Get(id: string) =
-    try
-      let event = EventsProxy.getEvent <| new Guid(id)
-      match box event with
-      | null ->
-        this.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")
-      | _ ->
-        this.Request.CreateResponse(HttpStatusCode.OK, event |> Event.toEventDetail)
-    with
-    | ex ->
-      let oldevent = EventsFacade.getEvent id
-      match box oldevent with
-      | null ->
-        this.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")
-      | _ ->
-        this.Request.CreateResponse(HttpStatusCode.OK, oldevent)
+  // TODO: swtich id to guid when event by session date is no longer used. 
+    member x.Get (id : string) = 
+        match getEventDetail id with  
+        | Some event -> x.Request.CreateResponse(HttpStatusCode.OK, event)
+        | None -> x.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")            
 
-  member this.Post(event: Event) =
-    let guid = event |> Event.toDto |> EventsProxy.postEvent
-    this.Request.CreateResponse(HttpStatusCode.Created, guid)
+    member this.Post(event: Event) =
+        let guid = event |> Event.toDto |> EventsProxy.postEvent
+        this.Request.CreateResponse(HttpStatusCode.Created, guid)
