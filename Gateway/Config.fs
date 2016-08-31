@@ -9,14 +9,16 @@ let getConfigValue (key : string) =
     else 
         value
 
-let getUriConfigValue (key : string) = 
-    getConfigValue key |> Uri
+let getUriConfigValue (key : string) = getConfigValue key |> Uri
 
 let baseUrl = getConfigValue "BaseUrl"
-let handlesUri = getUriConfigValue "HandlesUrl"
-let sessionsUri = getUriConfigValue "SessionsUrl"
-let sessionIdsUri = getUriConfigValue "SessionIdsUrl"
-let profilesUri = getUriConfigValue "ProfilesUrl"
-let eventsUri = getUriConfigValue "EventsUrl"
-let lastContactUri = getUriConfigValue "LastContactUrl"
-let correspondenceUri = getUriConfigValue "CorrespondenceUrl"
+let sessionsServiceUri = getUriConfigValue "SessionsServiceUrl"
+let commsServiceUri = getUriConfigValue "CommsServiceUrl"
+
+let handlesUri = Uri (sessionsServiceUri, "handles")
+let sessionsUri = Uri (sessionsServiceUri, "sessions")
+let sessionIdsUri = Uri (sessionsServiceUri, "sessions/ids")
+let profilesUri = Uri (sessionsServiceUri, "profiles")
+let eventsUri = Uri (sessionsServiceUri, "events")
+let lastContactUri = Uri (commsServiceUri, "last-contact")
+let correspondenceUri = Uri (commsServiceUri, "correspondence")
