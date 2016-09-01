@@ -18,7 +18,7 @@ let getEventSummariesByDatedSessions() =
     getSessions()
     |> Array.filter (fun session -> session.Date.IsSome)
     |> Array.groupBy (fun session -> session.Date.Value)
-    |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = getIds eventSessions})      
+    |> Array.map (fun (date, eventSessions) -> {EventSummary.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; SessionIds = getIds eventSessions})      
 
 let getEventDetailByDatedSessionsAndId(id) = 
     let date = DateTime.Parse(id, null, System.Globalization.DateTimeStyles.RoundtripKind)
