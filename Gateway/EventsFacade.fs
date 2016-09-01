@@ -37,7 +37,7 @@ let getEventSummaries() =
         EventsProxy.getEvents()
         |> Array.map (fun event -> 
             let sessionIds = getSessionIdsByEventId <| Guid.Parse event.Id //TODO when old events are removed, change id to guid and remove this parse
-            Event.toEventSummary sessionIds event)
+            Event.toSummary sessionIds event)
     Array.concat [ events ; eventsBySessionDates ]
 
 //TODO: Once events are complete, remove old events by session date and extra conditional handling.
@@ -45,13 +45,13 @@ let getEventDetail (id: string) =
     try
         match Guid.TryParse id with
         | true, eventId -> 
-            let eventRecord = EventsProxy.getEvent eventId
+            let record = EventsProxy.getEvent eventId
             let eventSessions = 
                 getSessionsByEventId eventId 
                 |> Array.map (fun session -> 
                     let speaker = getSpeaker session.SpeakerId
                     Session.toEventSession speaker session)
-            Event.toEventDetail eventSessions eventRecord |> Some
+            Event.toDetail eventSessions record |> Some
         | false, _ -> 
             getEventDetailByDatedSessionsAndId id |> Some
     with
