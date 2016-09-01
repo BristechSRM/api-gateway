@@ -53,7 +53,6 @@
     <Compile Include="DocsController.fs" />
     <Compile Include="EventsController.fs" />
     <Compile Include="HandlesController.fs" />
-    <Compile Include="OldEventsController.fs" />
     <Compile Include="SessionsController.fs" />
     <Compile Include="SpeakersController.fs" />
     <Compile Include="LogExceptionHandler.fs" />
