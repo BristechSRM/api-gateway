@@ -41,7 +41,7 @@ module Session =
         |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
         |> Option.map convertToLastContactSummary
 
-    let toModel lastContacts speaker admin (session : Dtos.Session) : Models.Session =
+    let toModel lastContacts speaker admin event (session : Dtos.Session) : Models.Session =
         { Id = session.Id
           Title = session.Title
           Description = session.Description
@@ -50,6 +50,7 @@ module Session =
           DateAdded = session.DateAdded
           Speaker = speaker
           Admin = admin
+          Event = event
           LastContact = 
             match session.AdminId with 
             | Some aid -> getLastContact aid session.SpeakerId lastContacts
@@ -63,7 +64,8 @@ module Session =
           Date = session.Date
           DateAdded = session.DateAdded
           SpeakerId = session.Speaker.Id
-          AdminId = session.Admin |> Option.map (fun admin -> admin.Id) }
+          AdminId = session.Admin |> Option.map (fun admin -> admin.Id)
+          EventId = session.Event |> Option.map (fun event -> Guid(event.Id)) } //TODO remove guid cast when event id is guid
 
     let toEventSession (speaker : Models.Speaker) (session : Dtos.Session) : Models.EventSession = 
         { Id = session.Id
@@ -111,6 +113,11 @@ module Event =
           Sessions = eventSessions }
 
     let toDto (event: Models.Event) : Dtos.Event =
+        { Id = event.Id 
+          Date = event.Date
+          Name = event.Name }
+
+    let toModel (event: Dtos.Event) : Models.Event =
         { Id = event.Id 
           Date = event.Date
           Name = event.Name }

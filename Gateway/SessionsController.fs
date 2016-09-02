@@ -1,38 +1,19 @@
 ﻿namespace Controllers
 
-open AdminFacade
 open DataTransform
-open LastContactProxy
 open RestModels
-open Serilog
 open SessionsProxy
-open SpeakerFacade
 open System
 open System.Net
-open System.Net.Http
 open System.Web.Http
+open SessionsFacade
 
 type SessionsController() = 
     inherit ApiController()
     
-    member x.Get() = 
-        (fun () -> 
-            let sessions = getSessions()
-            let lastContacts = getLastContacts()
-            sessions |> Seq.map (fun session -> 
-                let speaker = getSpeaker session.SpeakerId
-                let admin = session.AdminId |> Option.map getAdmin
-                Session.toModel lastContacts speaker admin session))
-        |> Catch.respond x HttpStatusCode.OK
+    member x.Get() = (fun () -> getSessionModels()) |> Catch.respond x HttpStatusCode.OK
     
-    member x.Get(id : Guid) = 
-        (fun () -> 
-            let session = getSession id
-            let speaker = getSpeaker session.SpeakerId
-            let admin = session.AdminId |> Option.map getAdmin
-            let lastContacts = getLastContacts()
-            Session.toModel lastContacts speaker admin session)
-        |> Catch.respond x HttpStatusCode.OK
+    member x.Get(id : Guid) = (fun () -> getSessionModel id) |> Catch.respond x HttpStatusCode.OK
 
     member x.Post(session : Models.Session) = (fun () -> session |> Session.toDto |> addSession) |> Catch.respond x HttpStatusCode.Created
     

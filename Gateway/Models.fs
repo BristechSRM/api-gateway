@@ -43,6 +43,12 @@ type LastContact =
       ReceiverId : Guid }
 
 [<CLIMutable>]
+type Event =
+    { Id: string //TODO change to guid after "events by session dates are removed"
+      Date: DateTime option
+      Name: string } 
+
+[<CLIMutable>]
 type Session =
     { Id : Guid
       Title : string
@@ -52,6 +58,7 @@ type Session =
       DateAdded : string
       Speaker : Speaker
       Admin : Admin option
+      Event : Event option
       LastContact : LastContact option }
 
 [<CLIMutable>]
@@ -94,9 +101,3 @@ type CorrespondenceItem =
       Type : string
       SenderHandle : string
       ReceiverHandle : string }
-
-[<CLIMutable>]
-type Event =
-    { Id: string
-      Date: DateTime option
-      Name: string }

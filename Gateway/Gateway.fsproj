@@ -46,6 +46,7 @@
     <Compile Include="ProfilesFacade.fs" />
     <Compile Include="AdminFacade.fs" />
     <Compile Include="SpeakerFacade.fs" />
+    <Compile Include="SessionsFacade.fs" />
     <Compile Include="EventsFacade.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="AdminsController.fs" />
