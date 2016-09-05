@@ -49,6 +49,14 @@ type Event =
       Name: string } 
 
 [<CLIMutable>]
+type EventSummary =
+    { Id : string
+      Date : DateTime
+      Description : string
+      Location : string
+      SessionIds : Guid[] }
+
+[<CLIMutable>]
 type Session =
     { Id : Guid
       Title : string
@@ -58,7 +66,7 @@ type Session =
       DateAdded : string
       Speaker : Speaker
       Admin : Admin option
-      Event : Event option
+      Event : EventSummary option
       LastContact : LastContact option }
 
 [<CLIMutable>]
@@ -74,14 +82,6 @@ type EventSession =
       SpeakerRating : int
       StartDate : DateTime option
       EndDate : DateTime option }
-
-[<CLIMutable>]
-type EventSummary =
-    { Id : string
-      Date : DateTime
-      Description : string
-      Location : string
-      SessionIds : Guid[] }
 
 [<CLIMutable>]
 type EventDetail =

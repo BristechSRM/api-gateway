@@ -6,6 +6,7 @@ open SessionsProxy
 open EventsProxy
 open SpeakerFacade
 open LastContactProxy
+open EventsFacade
 open DataTransform
 
 let getSessionModels() = 
@@ -21,6 +22,8 @@ let getSessionModel (id : Guid) =
     let session = getSession id
     let speaker = getSpeaker session.SpeakerId
     let admin = session.AdminId |> Option.map getAdmin
-    let event = session.EventId |> Option.map (getEvent >> Event.toModel)
+    let event = 
+        session.EventId 
+        |> Option.bind (fun eventId -> getEventSummary (eventId.ToString()))
     let lastContacts = getLastContacts()
     Session.toModel lastContacts speaker admin event session
