@@ -74,7 +74,7 @@ type EventSummary =
       Date : DateTime
       Description : string
       Location : string
-      Sessions : Guid[] }
+      SessionIds : Guid[] }
 
 [<CLIMutable>]
 type EventDetail =

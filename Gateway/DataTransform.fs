@@ -98,7 +98,7 @@ module Event =
               | Some date -> date
           Description = event.Name
           Location = event.Name
-          Sessions = sessionIds }
+          SessionIds = sessionIds }
 
     let toDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
         { Id = event.Id
