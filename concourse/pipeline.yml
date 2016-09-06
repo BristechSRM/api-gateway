@@ -39,8 +39,7 @@ resources:
   source:
     serviceName: gateway
     executableName: Gateway
-    nodeName: {{gatewayNode}}
-    portNumber: 8080
+    portNumber: 8081
     repository: bristechsrm/gateway
-    swarmMasterIp: {{swarmMasterIp}}
-    network: bridge
+    swarmMaster: {{swarmMaster}}
+    network: srm-swarm
