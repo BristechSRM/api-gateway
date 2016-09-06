@@ -58,6 +58,6 @@ type CorrespondenceItem =
       ReceiverHandle : string }
 
 type Event =
-    { Id: string
+    { Id: Guid
       Date: DateTime option
       Name: string }
