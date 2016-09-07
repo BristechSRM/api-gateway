@@ -8,12 +8,9 @@ open SessionsProxy
 open SessionIdsProxy  
 
 let getEventSummary (eventId : Guid) = 
-    try
-        let event = EventsProxy.getEvent eventId
-        let sessionIds = getSessionIdsByEventId eventId
-        Event.toSummary sessionIds event |> Some
-    with
-    | _ -> None
+    let event = EventsProxy.getEvent eventId
+    let sessionIds = getSessionIdsByEventId eventId
+    Event.toSummary sessionIds event
 
 let getEventSummaries() = 
     EventsProxy.getEvents()
@@ -22,13 +19,10 @@ let getEventSummaries() =
         Event.toSummary sessionIds event)
 
 let getEventDetail (eventId: Guid) = 
-    try
-        let record = EventsProxy.getEvent eventId
-        let eventSessions = 
-            getSessionsByEventId eventId 
-            |> Array.map (fun session -> 
-                let speaker = getSpeaker session.SpeakerId
-                Session.toEventSession speaker session)
-        Event.toDetail eventSessions record |> Some
-    with
-    | _ -> None
+    let record = EventsProxy.getEvent eventId
+    let eventSessions = 
+        getSessionsByEventId eventId 
+        |> Array.map (fun session -> 
+            let speaker = getSpeaker session.SpeakerId
+            Session.toEventSession speaker session)
+    Event.toDetail eventSessions record

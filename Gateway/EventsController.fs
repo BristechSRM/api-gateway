@@ -13,10 +13,7 @@ type EventsController() =
 
     member x.Get() = (fun () -> getEventSummaries()) |> Catch.respond x HttpStatusCode.OK
 
-    member x.Get (id : Guid) = 
-        match getEventDetail id with  
-        | Some event -> x.Request.CreateResponse(HttpStatusCode.OK, event)
-        | None -> x.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")            
+    member x.Get (id : Guid) = (fun () -> getEventDetail id) |> Catch.respond x HttpStatusCode.OK    
 
     member this.Post(event: Event) =
         let guid = event |> Event.toDto |> EventsProxy.postEvent
