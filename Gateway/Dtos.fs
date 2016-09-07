@@ -24,7 +24,8 @@ type Session =
       Date : DateTime option
       DateAdded : string
       SpeakerId : Guid
-      AdminId : Guid option }
+      AdminId : Guid option 
+      EventId : Guid option }
 
 type LastContact =
     { Id : string

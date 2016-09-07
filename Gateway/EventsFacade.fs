@@ -31,6 +31,19 @@ let getEventDetailByDatedSessionsAndId(id) =
     let event = { EventDetail.Id = date.Date |> convertToISO8601; Date = date; Description = ""; Location = ""; Sessions = eventSessions }
     event
 
+let getEventSummary (id : string) = 
+    try
+        match Guid.TryParse id with
+        | true, eventId -> 
+            let event = EventsProxy.getEvent eventId
+            let sessionIds = getSessionIdsByEventId eventId
+            Event.toSummary sessionIds event |> Some
+        | false, _ -> 
+            getEventSummariesByDatedSessions()
+            |> Array.tryFind (fun summary -> summary.Id = id)
+    with
+    | _ -> None
+
 let getEventSummaries() = 
     let eventsBySessionDates = getEventSummariesByDatedSessions() //TODO remove old event by session date
     let events = 
