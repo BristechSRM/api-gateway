@@ -1,5 +1,6 @@
 ﻿module EventsController
 
+open System
 open EventsFacade
 open DataTransform
 open Models
@@ -12,11 +13,7 @@ type EventsController() =
 
     member x.Get() = (fun () -> getEventSummaries()) |> Catch.respond x HttpStatusCode.OK
 
-  // TODO: swtich id to guid when event by session date is no longer used. 
-    member x.Get (id : string) = 
-        match getEventDetail id with  
-        | Some event -> x.Request.CreateResponse(HttpStatusCode.OK, event)
-        | None -> x.Request.CreateErrorResponse(HttpStatusCode.NotFound, "")            
+    member x.Get (id : Guid) = (fun () -> getEventDetail id) |> Catch.respond x HttpStatusCode.OK    
 
     member this.Post(event: Event) =
         let guid = event |> Event.toDto |> EventsProxy.postEvent

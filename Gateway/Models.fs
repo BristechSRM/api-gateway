@@ -1,16 +1,6 @@
 ﻿namespace Models
 
 open System
-open System.Net
-
-//TODO rename for consistency. 
-type ServerError =
-    { HttpStatusCode : HttpStatusCode
-      Body : string }
-
-type Result<'Success, 'Failure> =
-    | Success of 'Success
-    | Failure of 'Failure
 
 [<CLIMutable>]
 type Handle =
@@ -44,13 +34,13 @@ type LastContact =
 
 [<CLIMutable>]
 type Event =
-    { Id: string //TODO change to guid after "events by session dates are removed"
+    { Id: Guid
       Date: DateTime option
       Name: string } 
 
 [<CLIMutable>]
 type EventSummary =
-    { Id : string
+    { Id : Guid
       Date : DateTime
       Description : string
       Location : string
@@ -85,7 +75,7 @@ type EventSession =
 
 [<CLIMutable>]
 type EventDetail =
-    { Id : string
+    { Id : Guid
       Date : DateTime
       Description : string
       Location : string

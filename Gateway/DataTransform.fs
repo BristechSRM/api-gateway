@@ -65,7 +65,7 @@ module Session =
           DateAdded = session.DateAdded
           SpeakerId = session.Speaker.Id
           AdminId = session.Admin |> Option.map (fun admin -> admin.Id)
-          EventId = session.Event |> Option.map (fun event -> Guid(event.Id)) } //TODO remove guid cast when event id is guid
+          EventId = session.Event |> Option.map (fun event -> event.Id) } 
 
     let toEventSession (speaker : Models.Speaker) (session : Dtos.Session) : Models.EventSession = 
         { Id = session.Id
