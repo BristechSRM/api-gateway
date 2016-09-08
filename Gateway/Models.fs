@@ -36,7 +36,8 @@ type LastContact =
 type Event =
     { Id: Guid
       Date: DateTime option
-      Name: string } 
+      Name: string 
+      PublishedDate : DateTime option } 
 
 [<CLIMutable>]
 type EventSummary =
@@ -44,20 +45,8 @@ type EventSummary =
       Date : DateTime
       Description : string
       Location : string
+      PublishedDate : DateTime option 
       SessionIds : Guid[] }
-
-[<CLIMutable>]
-type Session =
-    { Id : Guid
-      Title : string
-      Description : string
-      Status : string
-      Date : DateTime option
-      DateAdded : string
-      Speaker : Speaker
-      Admin : Admin option
-      Event : EventSummary option
-      LastContact : LastContact option }
 
 [<CLIMutable>]
 type EventSession =
@@ -79,7 +68,21 @@ type EventDetail =
       Date : DateTime
       Description : string
       Location : string
+      PublishedDate : DateTime option 
       Sessions : EventSession[] }
+
+[<CLIMutable>]
+type Session =
+    { Id : Guid
+      Title : string
+      Description : string
+      Status : string
+      Date : DateTime option
+      DateAdded : string
+      Speaker : Speaker
+      Admin : Admin option
+      Event : EventSummary option
+      LastContact : LastContact option }
 
 [<CLIMutable>]
 type CorrespondenceItem = 
