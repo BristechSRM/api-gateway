@@ -99,7 +99,8 @@ module Event =
               | None -> DateTime.Today
               | Some date -> date
           Description = event.Name
-          Location = event.Name
+          Location = ""
+          PublishedDate = event.PublishedDate
           SessionIds = sessionIds }
 
     let toDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
@@ -109,16 +110,19 @@ module Event =
               | None -> DateTime.Today
               | Some date -> date
           Description = event.Name
-          Location = event.Name
+          Location = ""
+          PublishedDate = event.PublishedDate
           Sessions = eventSessions }
 
     let toDto (event: Models.Event) : Dtos.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name }
+          Name = event.Name 
+          PublishedDate = event.PublishedDate }
 
     let toModel (event: Dtos.Event) : Models.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name }
+          Name = event.Name 
+          PublishedDate = event.PublishedDate }
 
