@@ -43,6 +43,7 @@
     <Compile Include="ProfilesProxy.fs" />
     <Compile Include="SessionsProxy.fs" />
     <Compile Include="SessionIdsProxy.fs" />
+    <Compile Include="PublishProxy.fs" />
     <Compile Include="ProfilesFacade.fs" />
     <Compile Include="AdminFacade.fs" />
     <Compile Include="SpeakerFacade.fs" />

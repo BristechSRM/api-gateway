@@ -18,3 +18,9 @@ type EventsController() =
     member this.Post(event: Event) =
         let guid = event |> Event.toDto |> EventsProxy.postEvent
         this.Request.CreateResponse(HttpStatusCode.Created, guid)
+
+    [<Route("events/publish")>]
+    [<HttpPost>]
+    member this.PublishEvent(eventId : Guid) = 
+        let result = PublishProxy.publishEvent eventId
+        this.Request.CreateResponse(HttpStatusCode.NoContent)

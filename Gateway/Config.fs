@@ -2,18 +2,19 @@
 open System
 open System.Configuration
 
-let getConfigValue (key : string) = 
+let getString (key : string) = 
     let value = ConfigurationManager.AppSettings.Item(key)
     if String.IsNullOrWhiteSpace value then
         failwith <| sprintf "Missing configuration value: %s" key
     else 
         value
 
-let getUriConfigValue (key : string) = getConfigValue key |> Uri
+let getUri (key : string) = getString key |> Uri
 
-let baseUrl = getConfigValue "BaseUrl"
-let sessionsServiceUri = getUriConfigValue "SessionsServiceUrl"
-let commsServiceUri = getUriConfigValue "CommsServiceUrl"
+let baseUrl = getString "BaseUrl"
+let sessionsServiceUri = getUri "SessionsServiceUrl"
+let commsServiceUri = getUri "CommsServiceUrl"
+let publishServiceUri = getUri "PublishServiceUrl"
 
 //Note : when using the Uri constructor, slash must be on the end of a relative url that will have other parts attached
 //Alternatively, use UriBuilder if things get more complicated. 
@@ -24,3 +25,4 @@ let profilesUri = Uri (sessionsServiceUri, "profiles/")
 let eventsUri = Uri (sessionsServiceUri, "events/")
 let lastContactUri = Uri (commsServiceUri, "last-contact/")
 let correspondenceUri = Uri (commsServiceUri, "correspondence/")
+let publishUri = Uri(publishServiceUri, "publish/")

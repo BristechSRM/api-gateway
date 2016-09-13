@@ -30,6 +30,7 @@ let post (uri : Uri) (data : 'Model) =
     use response = client.PostAsync(uri, content).Result
     match response.StatusCode with
     | HttpStatusCode.Created -> response.Content.ReadAsStringAsync().Result
+    | HttpStatusCode.NoContent -> ""
     | errorCode -> 
         let errorMessage = response.Content.ReadAsStringAsync().Result
         let modelName = typeof<'Model>.Name
