@@ -42,7 +42,7 @@ type Event =
 [<CLIMutable>]
 type EventSummary =
     { Id : Guid
-      Date : DateTime
+      Date : DateTime option
       Description : string
       Location : string
       PublishedDate : DateTime option 
@@ -65,7 +65,7 @@ type EventSession =
 [<CLIMutable>]
 type EventDetail =
     { Id : Guid
-      Date : DateTime
+      Date : DateTime option
       Description : string
       Location : string
       PublishedDate : DateTime option 

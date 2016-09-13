@@ -78,7 +78,7 @@ module Session =
           SpeakerImageUri = speaker.ImageUri
           SpeakerRating = speaker.Rating
           StartDate = session.Date
-          EndDate = session.Date |> Option.map (fun date -> date.AddHours(1.0)) }
+          EndDate = session.Date }
 
 module Correspondence = 
     let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
@@ -94,10 +94,7 @@ module Correspondence =
 module Event =
     let toSummary sessionIds (event: Dtos.Event)  : Models.EventSummary =
         { Id = event.Id
-          Date = 
-              match event.Date with
-              | None -> DateTime.Today
-              | Some date -> date
+          Date = event.Date
           Description = event.Name
           Location = ""
           PublishedDate = event.PublishedDate
@@ -105,10 +102,7 @@ module Event =
 
     let toDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
         { Id = event.Id
-          Date = 
-              match event.Date with
-              | None -> DateTime.Today
-              | Some date -> date
+          Date = event.Date 
           Description = event.Name
           Location = ""
           PublishedDate = event.PublishedDate
