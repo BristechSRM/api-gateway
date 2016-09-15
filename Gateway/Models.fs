@@ -94,3 +94,11 @@ type CorrespondenceItem =
       Type : string
       SenderHandle : string
       ReceiverHandle : string }
+
+[<CLIMutable>]
+type MeetupEvent = 
+    { Id : Guid
+      EventId : Guid
+      MeetupId : string
+      PublishedDate : DateTime option
+      MeetupUrl : string }

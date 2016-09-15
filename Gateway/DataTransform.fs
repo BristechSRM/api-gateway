@@ -120,3 +120,17 @@ module Event =
           Name = event.Name 
           PublishedDate = event.PublishedDate }
 
+module MeetupEvent =
+    let toDto (me: Models.MeetupEvent) : Dtos.MeetupEvent =
+        { Id = me.Id 
+          EventId = me.EventId
+          MeetupId = me.MeetupId
+          PublishedDate = me.PublishedDate
+          MeetupUrl = me.MeetupUrl }
+
+    let toModel (me : Dtos.MeetupEvent) : Models.MeetupEvent =
+        { Id = me.Id 
+          EventId = me.EventId
+          MeetupId = me.MeetupId 
+          PublishedDate = me.PublishedDate
+          MeetupUrl = me.MeetupUrl }
