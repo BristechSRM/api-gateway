@@ -34,7 +34,7 @@ let configureWebApi (app : IAppBuilder) =
       |> Cors.configure
       |> Routes.configure
       |> Serialization.configure
-//      |> configureFilters
+      |> configureFilters
 
     config.Services.Replace(typedefof<IExceptionHandler>, new LogExceptionHandler())
 
