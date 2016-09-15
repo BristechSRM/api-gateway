@@ -49,6 +49,7 @@
     <Compile Include="SpeakerFacade.fs" />
     <Compile Include="EventsFacade.fs" />
     <Compile Include="SessionsFacade.fs" />
+    <Compile Include="MeetupEventsProxy.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="AdminsController.fs" />
     <Compile Include="CorrespondenceController.fs" />
@@ -57,6 +58,7 @@
     <Compile Include="HandlesController.fs" />
     <Compile Include="SessionsController.fs" />
     <Compile Include="SpeakersController.fs" />
+    <Compile Include="MeetupEventsController.fs" />
     <Compile Include="LogExceptionHandler.fs" />
     <Compile Include="LogHttpMiddleware.fs" />
     <Compile Include="StartupConfig.fs" />
@@ -77,6 +79,7 @@
       <HintPath>..\packages\FSharp.Core.4.0.0.1\lib\net40\FSharp.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FSharp.Data.TypeProviders" />
     <Reference Include="IdentityModel">
       <HintPath>..\packages\IdentityModel.1.11.0\lib\net45\IdentityModel.dll</HintPath>
       <Private>True</Private>
@@ -135,6 +138,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.IdentityModel.Tokens.Jwt">
       <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.2.206221351\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
