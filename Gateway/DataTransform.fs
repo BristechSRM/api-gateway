@@ -97,7 +97,6 @@ module Event =
           Date = event.Date
           Description = event.Name
           Location = ""
-          PublishedDate = event.PublishedDate
           SessionIds = sessionIds }
 
     let toDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
@@ -105,20 +104,17 @@ module Event =
           Date = event.Date 
           Description = event.Name
           Location = ""
-          PublishedDate = event.PublishedDate
           Sessions = eventSessions }
 
     let toDto (event: Models.Event) : Dtos.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name 
-          PublishedDate = event.PublishedDate }
+          Name = event.Name }
 
     let toModel (event: Dtos.Event) : Models.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name 
-          PublishedDate = event.PublishedDate }
+          Name = event.Name }
 
 module MeetupEvent =
     let toDto (me: Models.MeetupEvent) : Dtos.MeetupEvent =

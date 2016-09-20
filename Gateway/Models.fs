@@ -36,8 +36,7 @@ type LastContact =
 type Event =
     { Id: Guid
       Date: DateTime option
-      Name: string 
-      PublishedDate : DateTime option } 
+      Name: string } 
 
 [<CLIMutable>]
 type EventSummary =
@@ -45,7 +44,6 @@ type EventSummary =
       Date : DateTime option
       Description : string
       Location : string
-      PublishedDate : DateTime option 
       SessionIds : Guid[] }
 
 [<CLIMutable>]
@@ -68,7 +66,6 @@ type EventDetail =
       Date : DateTime option
       Description : string
       Location : string
-      PublishedDate : DateTime option 
       Sessions : EventSession[] }
 
 [<CLIMutable>]

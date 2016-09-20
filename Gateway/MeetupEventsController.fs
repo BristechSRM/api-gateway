@@ -18,6 +18,5 @@ type MeetupEventsController() =
         | _ -> this.Request.CreateResponse(HttpStatusCode.OK, me |> MeetupEvent.toModel)
 
     member this.Post(me: MeetupEvent) =
-        let guid = me |> MeetupEvent.toDto |> MeetupEventsProxy.postMeetupEvent
-        let result = PublishProxy.publishEvent me.EventId
+        let guid = PublishProxy.publishEvent me.EventId
         this.Request.CreateResponse(HttpStatusCode.Created, guid)
