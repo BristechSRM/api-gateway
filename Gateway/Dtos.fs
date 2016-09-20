@@ -60,7 +60,6 @@ type CorrespondenceItem =
 type Event =
     { Id: Guid
       Date: DateTime option
-      PublishedDate : DateTime option
       Name: string }
 
 type MeetupEvent = 
