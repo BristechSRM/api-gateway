@@ -21,7 +21,6 @@ type Session =
       Title : string
       Description : string
       Status : string
-      Date : DateTime option
       DateAdded : string
       SpeakerId : Guid
       AdminId : Guid option 
