@@ -56,9 +56,7 @@ type EventSession =
       SpeakerSurname : string
       SpeakerBio : string
       SpeakerImageUri : string
-      SpeakerRating : int
-      StartDate : DateTime option
-      EndDate : DateTime option }
+      SpeakerRating : int }
 
 [<CLIMutable>]
 type EventDetail =
@@ -74,7 +72,6 @@ type Session =
       Title : string
       Description : string
       Status : string
-      Date : DateTime option
       DateAdded : string
       Speaker : Speaker
       Admin : Admin option
