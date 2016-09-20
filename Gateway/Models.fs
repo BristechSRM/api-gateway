@@ -33,10 +33,19 @@ type LastContact =
       ReceiverId : Guid }
 
 [<CLIMutable>]
+type MeetupEvent = 
+    { Id : Guid
+      EventId : Guid
+      MeetupId : string
+      PublishedDate : DateTime option
+      MeetupUrl : string }
+
+[<CLIMutable>]
 type Event =
     { Id: Guid
       Date: DateTime option
-      Name: string } 
+      Name: string 
+      MeetupEventId : Guid option } 
 
 [<CLIMutable>]
 type EventSummary =
@@ -44,6 +53,7 @@ type EventSummary =
       Date : DateTime option
       Description : string
       Location : string
+      MeetupEvent : MeetupEvent option
       SessionIds : Guid[] }
 
 [<CLIMutable>]
@@ -88,11 +98,3 @@ type CorrespondenceItem =
       Type : string
       SenderHandle : string
       ReceiverHandle : string }
-
-[<CLIMutable>]
-type MeetupEvent = 
-    { Id : Guid
-      EventId : Guid
-      MeetupId : string
-      PublishedDate : DateTime option
-      MeetupUrl : string }

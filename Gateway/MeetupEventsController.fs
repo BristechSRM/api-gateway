@@ -15,7 +15,7 @@ type MeetupEventsController() =
         let me = getMeetupEvent id
         match box me with
         | null -> this.Request.CreateResponse(HttpStatusCode.NotFound, "")
-        | _ -> this.Request.CreateResponse(HttpStatusCode.OK, me |> MeetupEvent.toModel)
+        | _ -> this.Request.CreateResponse(HttpStatusCode.OK, me)
 
     member this.Post(me: MeetupEvent) =
         let guid = PublishProxy.publishEvent me.EventId
