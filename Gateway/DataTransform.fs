@@ -88,11 +88,12 @@ module Correspondence =
           ReceiverHandle = correspondenceItem.ReceiverHandle }
 
 module Event =
-    let toSummary sessionIds (event: Dtos.Event)  : Models.EventSummary =
+    let toSummary sessionIds meetupEvent (event: Dtos.Event)  : Models.EventSummary =
         { Id = event.Id
           Date = event.Date
           Description = event.Name
           Location = ""
+          MeetupEvent = meetupEvent
           SessionIds = sessionIds }
 
     let toDetail eventSessions (event: Dtos.Event) : Models.EventDetail =
@@ -105,12 +106,14 @@ module Event =
     let toDto (event: Models.Event) : Dtos.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name }
+          Name = event.Name 
+          MeetupEventId = event.MeetupEventId }
 
     let toModel (event: Dtos.Event) : Models.Event =
         { Id = event.Id 
           Date = event.Date
-          Name = event.Name }
+          Name = event.Name 
+          MeetupEventId = event.MeetupEventId }
 
 module MeetupEvent =
     let toDto (me: Models.MeetupEvent) : Dtos.MeetupEvent =
