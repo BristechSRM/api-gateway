@@ -22,8 +22,10 @@ type MeetupEventsController() =
         this.Request.CreateResponse(HttpStatusCode.Created, guid)
 
     member this.Delete(id : Guid) = 
-        PublishProxy.deleteEvent id
-        this.Request.CreateResponse(HttpStatusCode.NoContent)
+        match PublishProxy.deleteEvent id with
+        | None -> this.Request.CreateResponse(HttpStatusCode.NoContent)
+        | Some conflictMessage -> this.Request.CreateErrorResponse(HttpStatusCode.Conflict, conflictMessage)
+
 
     member this.Put(id : Guid) = 
         PublishProxy.updateEvent id
