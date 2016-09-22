@@ -24,3 +24,7 @@ type MeetupEventsController() =
     member this.Delete(id : Guid) = 
         PublishProxy.deleteEvent id
         this.Request.CreateResponse(HttpStatusCode.NoContent)
+
+    member this.Put(id : Guid) = 
+        PublishProxy.updateEvent id
+        this.Request.CreateResponse(HttpStatusCode.NoContent)
