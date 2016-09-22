@@ -64,7 +64,11 @@ let delete (uri : Uri) =
     use client = new HttpClient()
     use response = client.DeleteAsync(uri).Result
     match response.StatusCode with 
-    | HttpStatusCode.NoContent -> ()
+    | HttpStatusCode.NoContent -> None
+    | HttpStatusCode.Conflict -> 
+        let errorMessage = response.Content.ReadAsStringAsync().Result
+        let result = JsonConvert.DeserializeObject<ErrorWrapper>(errorMessage)
+        Some <| sprintf "Conflict: %s" result.Message
     | errorCode -> 
         let errorMessage = response.Content.ReadAsStringAsync().Result
         let message = sprintf "Error in delete request to uri %A. Status code: %i. Reason phrase: %s. Error Message: %s" uri (int (errorCode)) response.ReasonPhrase errorMessage
