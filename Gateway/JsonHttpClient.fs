@@ -33,8 +33,11 @@ let post (uri : Uri) (data : 'Model) =
     | HttpStatusCode.NoContent -> ""
     | errorCode -> 
         let errorMessage = response.Content.ReadAsStringAsync().Result
-        let modelName = typeof<'Model>.Name
-        let message = sprintf "Error in post request for %s. Status code: %i. Reason phrase: %s. Error Message: %s" modelName (int (errorCode)) response.ReasonPhrase errorMessage
+        let target = 
+            match typeof<'Model>.Name with
+            | "String" -> uri.ToString()
+            | name -> name
+        let message = sprintf "Error in post request for %s. Status code: %i. Reason phrase: %s. Error Message: %s" target (int (errorCode)) response.ReasonPhrase errorMessage
         Log.Error(message)
         failwith message
 
@@ -65,5 +68,22 @@ let delete (uri : Uri) =
     | errorCode -> 
         let errorMessage = response.Content.ReadAsStringAsync().Result
         let message = sprintf "Error in delete request to uri %A. Status code: %i. Reason phrase: %s. Error Message: %s" uri (int (errorCode)) response.ReasonPhrase errorMessage
+        Log.Error(message)
+        failwith message
+
+let update (uri : Uri) (data : 'Model) =
+    use client = new HttpClient()
+    let jsonData = JsonConvert.SerializeObject(data)
+    let content = new StringContent(jsonData, Encoding.UTF8, "application/json")
+    use response = client.PutAsync(uri, content).Result
+    match response.StatusCode with
+    | HttpStatusCode.NoContent -> ()
+    | errorCode -> 
+        let errorMessage = response.Content.ReadAsStringAsync().Result
+        let target = 
+            match typeof<'Model>.Name with
+            | "String" -> uri.ToString()
+            | name -> name
+        let message = sprintf "Error in put request for %s. Status code: %i. Reason phrase: %s. Error Message: %s" target (int (errorCode)) response.ReasonPhrase errorMessage
         Log.Error(message)
         failwith message
