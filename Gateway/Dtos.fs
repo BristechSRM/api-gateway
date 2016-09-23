@@ -34,6 +34,7 @@ type LastContact =
 
 type Handle =
     { Id : int
+      ProfileId : Guid
       Type : string
       Identifier : string }
 

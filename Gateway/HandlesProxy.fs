@@ -11,3 +11,5 @@ let getHandlesByProfileId (pid : Guid) = get<Handle []> <| new Uri(handlesUri, "
 let getHandle (hid : int) = get<Handle> <| new Uri(handlesUri, hid.ToString())
 
 let patchHandle (hid : int) (op : PatchOp) = patch handlesUri hid op
+
+let postHandle (handle : Handle) = post handlesUri handle |> ignore

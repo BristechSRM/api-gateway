@@ -15,4 +15,6 @@ type SpeakersController() =
 
     member x.Get(id : Guid) = (fun () -> getSpeaker id) |> Catch.respond x HttpStatusCode.OK
 
+    member x.Post(speaker : Models.Speaker) = (fun () -> addSpeaker speaker) |> Catch.respond x HttpStatusCode.Created
+
     member x.Patch(id : Guid, op : PatchOp) = (fun () -> patchProfile id op) |> Catch.respond x HttpStatusCode.NoContent
