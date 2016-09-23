@@ -24,3 +24,5 @@ let getSessionModel (id : Guid) =
     let event = session.EventId |> Option.map getEventSummary
     let lastContacts = getLastContacts()
     Session.toModel lastContacts speaker admin event session
+
+let addSessionModel (session : Models.Session) = session |> Session.toDto |> addSession
