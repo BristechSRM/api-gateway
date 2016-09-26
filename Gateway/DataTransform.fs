@@ -8,8 +8,9 @@ module Handle =
           Type = dto.Type
           Identifier = dto.Identifier }
 
-    let toHandleDto (handle : Models.Handle) : Dtos.Handle = 
+    let toHandleDto profileId (handle : Models.Handle) : Dtos.Handle = 
         { Id = handle.Id
+          ProfileId = profileId
           Type = handle.Type
           Identifier = handle.Identifier }
 
@@ -30,6 +31,14 @@ module Profile =
           ImageUri = profile.ImageUrl
           Bio = profile.Bio
           Handles = handles |> Seq.map Handle.toHandle }
+
+    let fromSpeaker (speaker : Models.Speaker) : Dtos.Profile =
+        { Id = speaker.Id
+          Forename = speaker.Forename
+          Surname = speaker.Surname
+          Rating = speaker.Rating
+          ImageUrl = speaker.ImageUri
+          Bio = speaker.Bio }         
 
 module Session = 
 

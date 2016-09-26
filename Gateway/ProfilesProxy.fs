@@ -12,4 +12,6 @@ let getProfile (pid : Guid) = get<Profile> <| new Uri(profilesUri, pid.ToString(
 
 let getAdminProfiles() = get<Profile []> <| new Uri(profilesUri, "?isAdmin=true")
 
+let addProfile (profile : Profile) = postAndGetGuid profilesUri profile
+
 let patchProfile (pid : Guid) (op : PatchOp) = patch profilesUri pid op
