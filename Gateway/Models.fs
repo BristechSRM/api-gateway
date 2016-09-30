@@ -89,6 +89,14 @@ type Session =
       LastContact : LastContact option }
 
 [<CLIMutable>]
+type Note = 
+    { Id : Guid
+      SessionId : Guid
+      DateAdded : DateTime
+      DateModified : DateTime 
+      Note : string }
+
+[<CLIMutable>]
 type CorrespondenceItem = 
     { Id : string
       SenderId : string

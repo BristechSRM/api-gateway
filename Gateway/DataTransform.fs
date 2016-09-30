@@ -85,6 +85,14 @@ module Session =
           SpeakerImageUri = speaker.ImageUri
           SpeakerRating = speaker.Rating }
 
+module Note = 
+    let toModel (note : Dtos.Note) : Models.Note = 
+        { Id = note.Id 
+          SessionId = note.SessionId
+          DateAdded = note.DateAdded
+          DateModified = note.DateModified
+          Note = note.Note }
+
 module Correspondence = 
     let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
         { Id = correspondenceItem.Id

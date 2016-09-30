@@ -26,6 +26,13 @@ type Session =
       AdminId : Guid option 
       EventId : Guid option }
 
+type Note = 
+    { Id : Guid
+      SessionId : Guid
+      DateAdded : DateTime
+      DateModified : DateTime 
+      Note : string }
+
 type LastContact =
     { Id : string
       Date : DateTime
