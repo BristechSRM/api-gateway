@@ -93,6 +93,13 @@ module Note =
           DateModified = note.DateModified
           Note = note.Note }
 
+    let toDto (note : Models.Note) : Dtos.Note = 
+        { Id = note.Id 
+          SessionId = note.SessionId
+          DateAdded = note.DateAdded
+          DateModified = note.DateModified
+          Note = note.Note }
+
 module Correspondence = 
     let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
         { Id = correspondenceItem.Id

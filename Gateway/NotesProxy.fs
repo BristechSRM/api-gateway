@@ -6,3 +6,5 @@ open JsonHttpClient
 open System
 
 let getNotesBySessionId (sessionId : Guid) = get<Note []> <| new Uri(notesUri, "?sessionId=" + sessionId.ToString())
+
+let postNote (note : Note) = postAndGetGuid notesUri note

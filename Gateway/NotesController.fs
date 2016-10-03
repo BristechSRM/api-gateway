@@ -11,3 +11,5 @@ type NotesController() =
 
     [<HttpGet>]
     member x.GetBySessionId(sessionId : Guid) = (fun () -> getNotesBySessionId sessionId |> Seq.map Note.toModel) |> Catch.respond x HttpStatusCode.OK
+
+    member x.Post(note : Models.Note) = (fun () -> note |> Note.toDto |> postNote) |> Catch.respond x HttpStatusCode.Created
