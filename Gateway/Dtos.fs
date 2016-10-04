@@ -33,12 +33,6 @@ type Note =
       DateModified : DateTime 
       Note : string }
 
-type LastContact =
-    { Id : string
-      Date : DateTime
-      ProfileIdOne : Guid
-      ProfileIdTwo : Guid }
-
 type Handle =
     { Id : int
       ProfileId : Guid
@@ -52,17 +46,6 @@ type Profile =
       ImageUrl : string
       Rating : int
       Bio : string }
-
-type CorrespondenceItem =
-    { Id : string
-      ExternalId : string
-      SenderId : string
-      ReceiverId : string
-      Date : string
-      Message : string
-      Type : string
-      SenderHandle : string
-      ReceiverHandle : string }
 
 type Event =
     { Id: Guid
