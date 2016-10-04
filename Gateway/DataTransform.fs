@@ -1,7 +1,5 @@
 ﻿module DataTransform
 
-open System
-
 module Handle = 
     let toHandle (dto : Dtos.Handle) : Models.Handle =
         { Id = dto.Id
@@ -42,15 +40,7 @@ module Profile =
 
 module Session = 
 
-    let private convertToLastContactSummary (dto : Dtos.LastContact) : Models.LastContact =
-        { Date = dto.Date; SenderId = dto.ProfileIdOne; ReceiverId = dto.ProfileIdTwo }
-
-    let private getLastContact (senderId : Guid) (receiverId : Guid) (lastContacts : Dtos.LastContact[]) =
-        lastContacts
-        |> Seq.tryFind (fun lastContact -> (lastContact.ProfileIdOne.Equals senderId && lastContact.ProfileIdTwo.Equals receiverId) || (lastContact.ProfileIdOne.Equals receiverId && lastContact.ProfileIdTwo.Equals senderId))
-        |> Option.map convertToLastContactSummary
-
-    let toModel lastContacts speaker admin event (session : Dtos.Session) : Models.Session =
+    let toModel speaker admin event (session : Dtos.Session) : Models.Session =
         { Id = session.Id
           Title = session.Title
           Description = session.Description
@@ -58,11 +48,7 @@ module Session =
           DateAdded = session.DateAdded
           Speaker = speaker
           Admin = admin
-          Event = event
-          LastContact = 
-            match session.AdminId with 
-            | Some aid -> getLastContact aid session.SpeakerId lastContacts
-            | None -> None }
+          Event = event }
 
     let toDto (session : Models.Session) : Dtos.Session = 
         { Id = session.Id
@@ -99,17 +85,6 @@ module Note =
           DateAdded = note.DateAdded
           DateModified = note.DateModified
           Note = note.Note }
-
-module Correspondence = 
-    let toModel (correspondenceItem : Dtos.CorrespondenceItem) : Models.CorrespondenceItem =
-        { Id = correspondenceItem.Id
-          SenderId = correspondenceItem.SenderId
-          ReceiverId = correspondenceItem.ReceiverId
-          Date = correspondenceItem.Date
-          Message = correspondenceItem.Message
-          Type = correspondenceItem.Type
-          SenderHandle = correspondenceItem.SenderHandle
-          ReceiverHandle = correspondenceItem.ReceiverHandle }
 
 module Event =
     let toSummary sessionIds meetupEvent (event: Dtos.Event)  : Models.EventSummary =

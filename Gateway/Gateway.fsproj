@@ -36,10 +36,8 @@
     <Compile Include="RestModels.fs" />
     <Compile Include="DataTransform.fs" />
     <Compile Include="JsonHttpClient.fs" />
-    <Compile Include="CorrespondenceProxy.fs" />
     <Compile Include="EventsProxy.fs" />
     <Compile Include="HandlesProxy.fs" />
-    <Compile Include="LastContactProxy.fs" />
     <Compile Include="ProfilesProxy.fs" />
     <Compile Include="SessionsProxy.fs" />
     <Compile Include="SessionIdsProxy.fs" />
@@ -53,7 +51,6 @@
     <Compile Include="SessionsFacade.fs" />
     <Compile Include="Catch.fs" />
     <Compile Include="AdminsController.fs" />
-    <Compile Include="CorrespondenceController.fs" />
     <Compile Include="DocsController.fs" />
     <Compile Include="EventsController.fs" />
     <Compile Include="HandlesController.fs" />

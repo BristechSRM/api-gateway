@@ -13,7 +13,6 @@ let getUri (key : string) = getString key |> Uri
 
 let baseUrl = getString "BaseUrl"
 let sessionsServiceUri = getUri "SessionsServiceUrl"
-let commsServiceUri = getUri "CommsServiceUrl"
 let publishServiceUri = getUri "PublishServiceUrl"
 
 //Note : when using the Uri constructor, slash must be on the end of a relative url that will have other parts attached
@@ -25,6 +24,4 @@ let profilesUri = Uri (sessionsServiceUri, "profiles/")
 let eventsUri = Uri (sessionsServiceUri, "events/")
 let meetupEventsUri = Uri (sessionsServiceUri, "meetupevents/")
 let notesUri = Uri (sessionsServiceUri, "notes/")
-let lastContactUri = Uri (commsServiceUri, "last-contact/")
-let correspondenceUri = Uri (commsServiceUri, "correspondence/")
 let publishUri = Uri(publishServiceUri, "publish/")

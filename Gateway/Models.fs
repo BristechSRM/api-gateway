@@ -27,12 +27,6 @@ type Admin =
       Handles : Handle seq }
 
 [<CLIMutable>]
-type LastContact =
-    { Date : DateTime
-      SenderId : Guid
-      ReceiverId : Guid }
-
-[<CLIMutable>]
 type MeetupEvent = 
     { Id : Guid
       EventId : Guid
@@ -85,8 +79,7 @@ type Session =
       DateAdded : string
       Speaker : Speaker
       Admin : Admin option
-      Event : EventSummary option
-      LastContact : LastContact option }
+      Event : EventSummary option }
 
 [<CLIMutable>]
 type Note = 
@@ -95,14 +88,3 @@ type Note =
       DateAdded : DateTime
       DateModified : DateTime 
       Note : string }
-
-[<CLIMutable>]
-type CorrespondenceItem = 
-    { Id : string
-      SenderId : string
-      ReceiverId : string
-      Date : string
-      Message : string
-      Type : string
-      SenderHandle : string
-      ReceiverHandle : string }
