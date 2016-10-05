@@ -13,7 +13,6 @@ type Speaker =
     { Id : Guid
       Forename : string
       Surname : string
-      Rating : int
       ImageUri : string
       Bio : string
       Handles : Handle seq }
@@ -59,8 +58,7 @@ type EventSession =
       SpeakerForename : string
       SpeakerSurname : string
       SpeakerBio : string
-      SpeakerImageUri : string
-      SpeakerRating : int }
+      SpeakerImageUri : string }
 
 [<CLIMutable>]
 type EventDetail =

@@ -327,10 +327,6 @@
                     "format": "uri",
                     "description": "The URI of the speaker's avatar"
                 },
-                "rating": {
-                    "type": "integer",
-                    "description": "The speaker's credibility rating (1 to 5)"
-                },
                 "bio": {
                     "type": "string",
                     "description": "The speaker's biography"
@@ -366,10 +362,6 @@
                     "type": "string",
                     "format": "uri",
                     "description": "The URI of the speaker's avatar"
-                },
-                "rating": {
-                    "type": "integer",
-                    "description": "The speaker's credibility rating (1 to 5)"
                 }
             }
         },
@@ -558,10 +550,6 @@
                     "type": "string",
                     "format": "uri",
                     "description": "The uri of the speaker's avatar"
-                },
-                "speakerRating": {
-                    "type": "integer",
-                    "description": "A rating of the profile (from 1 to 5)"
                 },
                 "startDate": {
                     "type": "string",

@@ -6,7 +6,6 @@ type Speaker =
     { Id : Guid
       Forename : string
       Surname : string
-      Rating : int
       ImageUri : string
       Bio : string }
 
@@ -44,7 +43,6 @@ type Profile =
       Forename : string
       Surname : string
       ImageUrl : string
-      Rating : int
       Bio : string }
 
 type Event =
