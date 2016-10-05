@@ -25,7 +25,6 @@ module Profile =
         { Id = profile.Id
           Forename = profile.Forename
           Surname = profile.Surname
-          Rating = profile.Rating
           ImageUri = profile.ImageUrl
           Bio = profile.Bio
           Handles = handles |> Seq.map Handle.toHandle }
@@ -34,7 +33,6 @@ module Profile =
         { Id = speaker.Id
           Forename = speaker.Forename
           Surname = speaker.Surname
-          Rating = speaker.Rating
           ImageUrl = speaker.ImageUri
           Bio = speaker.Bio }         
 
@@ -68,8 +66,7 @@ module Session =
           SpeakerForename = speaker.Forename
           SpeakerSurname = speaker.Surname
           SpeakerBio = speaker.Bio
-          SpeakerImageUri = speaker.ImageUri
-          SpeakerRating = speaker.Rating }
+          SpeakerImageUri = speaker.ImageUri }
 
 module Note = 
     let toModel (note : Dtos.Note) : Models.Note = 
